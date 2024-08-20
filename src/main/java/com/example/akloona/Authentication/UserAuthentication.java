@@ -1,4 +1,4 @@
 package com.example.akloona.Authentication;
 
-public class UserAuthentication {
+public class UserAuthentication {n
 }
