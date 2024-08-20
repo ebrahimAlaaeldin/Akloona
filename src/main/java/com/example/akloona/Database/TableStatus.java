@@ -16,11 +16,11 @@ public class TableStatus {
 
 
     public TableStatus() {
-        this( false, 4);
+        this( false, 2);
     }
 
     public TableStatus(boolean isOccupied, int capacity) {
-        this.isReserved = isReserved;
+        this.isReserved = isOccupied;
         this.capacity = capacity;
     }
 }
