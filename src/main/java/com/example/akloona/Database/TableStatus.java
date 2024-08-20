@@ -20,7 +20,7 @@ public class TableStatus {
     }
 
     public TableStatus(boolean isOccupied, int capacity) {
-        this.isReserved = isReserved;
+        this.isReserved = isReserved;//I (omar) have an error here
         this.capacity = capacity;
     }
 }
