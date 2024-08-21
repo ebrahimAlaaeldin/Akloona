@@ -140,5 +140,4 @@ public class MainPage {
             throw new IllegalStateException("Only admins can delete restaurants");
         }
     }
-
 }
