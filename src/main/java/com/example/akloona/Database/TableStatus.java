@@ -1,8 +1,9 @@
 package com.example.akloona.Database;
 
 import jakarta.persistence.*;
+import lombok.Data;
 
-
+@Data
 @Entity(name = "TableStatus")
 public class TableStatus {
     @Id

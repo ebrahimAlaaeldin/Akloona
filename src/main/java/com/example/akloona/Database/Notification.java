@@ -1,10 +1,12 @@
 package com.example.akloona.Database;
 
 import jakarta.persistence.*;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import java.time.LocalDate;
-import java.time.LocalTime;
 
+
+
+@Data
 @NoArgsConstructor
 @Entity(name = "Notification")
 @Table(name = "Notification", uniqueConstraints = {
