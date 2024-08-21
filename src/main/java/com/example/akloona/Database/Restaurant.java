@@ -1,8 +1,11 @@
 package com.example.akloona.Database;
 
 import jakarta.persistence.*;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 
+
+@Data
 @Entity(name = "Restaurant")
 @NoArgsConstructor
 public class Restaurant {
