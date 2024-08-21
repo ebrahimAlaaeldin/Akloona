@@ -24,4 +24,12 @@ public class TableStatus {
         this.isReserved = isOccupied;
         this.capacity = capacity;
     }
+
+    // public int getTableID() { return ID; }
+
+    public Boolean getIsReserved() { return isReserved; }
+    public void setIsReserved(Boolean isReserved) { this.isReserved = isReserved; }
+
+    public Integer getCapacity() { return capacity; }
+    public void setCapacity(Integer capacity) { this.capacity = capacity; }
 }
