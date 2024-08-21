@@ -55,6 +55,7 @@ public class User_ {
     }
 
 
-
-
+    public int getId() {
+        return ID;
+    }
 }
