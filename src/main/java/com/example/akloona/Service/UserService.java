@@ -25,7 +25,7 @@ public class UserService {
         user.setEmail(email);
         user.setPhoneNumber(phoneNumber);
         user.setAddress(address);
-        user.setYearOfBirth(dob);
+        user.setDob(dob);
 
         user.calculateAge();
         userRepo.save(user);
