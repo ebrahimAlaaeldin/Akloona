@@ -49,6 +49,7 @@ public class AuthenticationService {
 
             userRepo.save(user);
             var jwtToken = jwtService.generateToken(user);
+            tokenRepository.save(Token.builder().token(jwtToken).user(user).build());
 
             return AuthenticationResponse.builder().token(jwtToken).build();
         } catch (DataIntegrityViolationException e) {
@@ -65,6 +66,16 @@ public class AuthenticationService {
 
         var user = userRepo.findByUsername(request.getUsername());
         var jwtToken = jwtService.generateToken(user);
+        var token = tokenRepository.findByUser_id(user.getId());
+        if (token.isPresent()) {
+            token.get().setToken(jwtToken);
+            token.get().setExpired(false);
+            token.get().setRevoked(false);
+            tokenRepository.save(token.get());
+        } else {
+            throw new RuntimeException("User not found please register");
+        }
+
         return AuthenticationResponse.builder().token(jwtToken).build();
     }
 

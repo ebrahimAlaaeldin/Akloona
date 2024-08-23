@@ -1,6 +1,7 @@
 package com.example.akloona.Authentication;
 
 
+import com.example.akloona.Token.TokenRepo;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -8,6 +9,7 @@ import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 
 ;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -18,11 +20,11 @@ import java.util.function.Function;
 
 
 @Service
-
+@RequiredArgsConstructor
 public class JwtService {
 
     private static final String Security_Key = "088TI3YCXQd26NOxZJXXKwFAIyojGuY2Y6HX7kVb9ftVp3Rz"; // At least 256 bits (32 bytes)
-
+    private final TokenRepo tokenRepo;
 
 
 
@@ -75,12 +77,16 @@ public class JwtService {
 
     public boolean isTokenValid(String token, UserDetails userDetails) {
         final String username = extractUsername(token);
+
         return (username.equals(userDetails.getUsername() )&& !isTokenExpired(token));
     }
 
     //Check if the token is expired or not by comparing the expiration date with the current date
     private boolean isTokenExpired(String token) {
-        return extractExpiration(token).before(new Date());
+        var token2 = tokenRepo.findByToken(token);
+        boolean isExpired = token2.isPresent() && token2.get().isExpired();
+
+        return extractExpiration(token).before(new Date()) || isExpired;
     }
 
     private Date extractExpiration(String token) {
