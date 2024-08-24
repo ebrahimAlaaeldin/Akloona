@@ -1,21 +1,31 @@
 package com.example.akloona.Database;
 
 
+import com.example.akloona.Authentication.Role;
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDate;
+import java.util.Collection;
+import java.util.List;
+
+
 
 @Data
 @Entity(name = "User_")
-@NoArgsConstructor
+
 @Table(name = "User_", uniqueConstraints = {
         @UniqueConstraint(name = "email_unique", columnNames = "email"),
         @UniqueConstraint(name = "phoneNumber_unique", columnNames = "phoneNumber"),
         @UniqueConstraint(name = "username_unique", columnNames = "username")
 })
-public class User_ {
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+public class User_  implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -33,29 +43,61 @@ public class User_ {
     @Column(name = "accountType", nullable = false)
     private String accountType;
 
-    @Column(name = "Dob", nullable = false)
-    private  int YearOfBirth;
+    @Column(name = "dob", nullable = false)
+    private  int dob;
     @Column(name = "age", nullable = false)
     private int age;
 
+    @Enumerated(EnumType.STRING)
+    private Role role;
 
-    public User_(String username, String password, String email, String phoneNumber, String address, String acountType, int dob) {
-        this.username = username;
-        this.password = password;
-        this.email = email;
-        this.phoneNumber = phoneNumber;
-        this.address = address;
-        this.accountType = acountType;
-        this.YearOfBirth = dob;
 
-    }
 
     public void calculateAge(){
-        this.age = LocalDate.now().getYear() - this.YearOfBirth;
+        this.age = LocalDate.now().getYear() - this.dob;
     }
 
 
     public int getId() {
         return ID;
     }
+
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+
+        return role.getAuthorities();
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return UserDetails.super.isAccountNonExpired();
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return UserDetails.super.isAccountNonLocked();
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return UserDetails.super.isCredentialsNonExpired();
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return UserDetails.super.isEnabled();
+    }
+
+    @Override
+    public String getUsername() {
+        return username;
+    }
+
+    @Override
+    public String getPassword() {
+        return password;
+    }
+
+
 }
