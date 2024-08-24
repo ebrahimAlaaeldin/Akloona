@@ -73,7 +73,8 @@ public class AuthenticationService {
                 request.getPassword()
         ));
 
-        var user = userRepo.findByUsername(request.getUsername());
+        var user = userRepo.findByUsername(request.getUsername())
+                .orElseThrow(() -> new RuntimeException("User not found"));
         var jwtToken = jwtService.generateToken(user);
         var token = tokenRepository.findByUser_id(user.getId());
         if (token.isPresent()) {
@@ -109,7 +110,7 @@ public class AuthenticationService {
         refreshToken = authHeader.substring(7);
         username = jwtService.extractUsername(refreshToken);
         if (username != null) {
-            var user = this.userRepo.findByUsername(username);
+            var user = this.userRepo.findByUsername(username).orElseThrow(() -> new RuntimeException("User not found"));
             if (jwtService.isTokenValid(refreshToken, user)) {
                 var accessToken = jwtService.generateToken(user);
                 revokeAllUserTokens(user);

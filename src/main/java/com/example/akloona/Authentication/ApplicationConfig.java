@@ -2,6 +2,7 @@ package com.example.akloona.Authentication;
 
 
 import com.example.akloona.Database.UserRepo;
+import com.example.akloona.Database.User_;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -28,7 +29,9 @@ public class ApplicationConfig {
         return new UserDetailsService() {
             @Override
             public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-                return  userRepo.findByUsername(username);
+
+                return userRepo.findByUsername(username)
+                        .orElseThrow(() -> new UsernameNotFoundException("User not found"));
             }
         };
 

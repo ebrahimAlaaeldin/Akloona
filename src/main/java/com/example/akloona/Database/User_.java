@@ -56,6 +56,11 @@ public class User_  implements UserDetails {
     private Role role;
 
 
+    // every user can have multiple reservations
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    private List<Reservation> reservations;
+
+
 
     public void calculateAge(){
         this.age = LocalDate.now().getYear() - this.dob;
@@ -66,6 +71,10 @@ public class User_  implements UserDetails {
         return ID;
     }
 
+    public void addReservation(Reservation reservation){
+        reservations.add(reservation);
+
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

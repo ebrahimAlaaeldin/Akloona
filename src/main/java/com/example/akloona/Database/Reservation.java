@@ -1,12 +1,15 @@
 package com.example.akloona.Database;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 
 @Data
-
+@Builder
+@AllArgsConstructor
 @Entity(name = "Reservation")
 @NoArgsConstructor
 public class Reservation {
@@ -18,10 +21,12 @@ public class Reservation {
     private String date;
     @Column(name = "time", nullable = false)
     private String time;
-    @Column(name = "tableID", nullable = false)
-    private int tableID;
-    @Column(name = "userID", nullable = false)
-    private int userID;
+    @ManyToOne
+    @JoinColumn(name = "tableID", nullable = false)
+    private TableStatus tableStatus;
+    @ManyToOne
+    @JoinColumn(name = "userID", nullable = false)
+    private User_ user;
     @Column(name = "isConfirmed", nullable = false)
     private boolean isConfirmed;
     @Column(name = "isCancelled", nullable = false)
@@ -29,20 +34,8 @@ public class Reservation {
     @Column(name = "guestCount", nullable = false)
     private  int guestCount;
 
-    public Reservation(String date, String time, int tableID, int userID, int guestCount) {
-        this.date = date;
-        this.time = time;
-        this.tableID = tableID;
-        this.userID = userID;
-        this.guestCount = guestCount;
-        this.isConfirmed = false;
-        this.isCancelled = false;
-
-    }
-
-    public int getUserID()
-    {
-        return this.userID;
-    }
+//    public int getTableId() {
+//        return tableStatus.getID();
+//    }
 
 }

@@ -29,7 +29,7 @@ public class ProfileUpdatesService {
         ));
 
 
-        var user = userRepo.findByUsername(request.getUsername());
+        var user = userRepo.findByUsername(request.getUsername()).orElseThrow(() -> new RuntimeException("User not found"));
         user.setPassword(passwordEncoder.encode(request.getNewPassword()));
         userRepo.save(user);
         return "Password changed successfully";
@@ -39,7 +39,9 @@ public class ProfileUpdatesService {
         String token = httpServletRequest.getHeader("Authorization").substring(7);
         String username = jwtService.extractUsername(token);
 
-        var user = userRepo.findByUsername(username);
+        var user = userRepo.findByUsername(username).orElseThrow(
+                () -> new RuntimeException("User not found")
+        );
         user.setEmail(Email);
         userRepo.save(user);
         return "Email changed successfully";
@@ -49,7 +51,9 @@ public class ProfileUpdatesService {
         String token = httpServletRequest.getHeader("Authorization").substring(7);
         String username = jwtService.extractUsername(token);
 
-        var user = userRepo.findByUsername(username);
+        var user = userRepo.findByUsername(username).orElseThrow(
+                () -> new RuntimeException("User not found")
+        );
         user.setAddress(address);
         userRepo.save(user);
         return "Address changed successfully";
@@ -72,7 +76,9 @@ public class ProfileUpdatesService {
         String token = httpServletRequest.getHeader("Authorization").substring(7);
         String username = jwtService.extractUsername(token);
 
-        var user = userRepo.findByUsername(username);
+        var user = userRepo.findByUsername(username).orElseThrow(
+                () -> new RuntimeException("User not found")
+        );
         user.setPhoneNumber(phoneNumber);
         userRepo.save(user);
         return "Phone number changed successfully";
