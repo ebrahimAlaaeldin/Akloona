@@ -26,16 +26,12 @@ public class Reservation {
     private TableStatus tableStatus;
     @ManyToOne
     @JoinColumn(name = "userID", nullable = false)
-    private User_ user;
+    private User_ user_;
     @Column(name = "isConfirmed", nullable = false)
     private boolean isConfirmed;
     @Column(name = "isCancelled", nullable = false)
     private boolean isCancelled;
     @Column(name = "guestCount", nullable = false)
     private  int guestCount;
-
-//    public int getTableId() {
-//        return tableStatus.getID();
-//    }
 
 }

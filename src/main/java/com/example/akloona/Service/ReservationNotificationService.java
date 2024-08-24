@@ -42,21 +42,24 @@ public class ReservationNotificationService {
 
         for (Reservation reservation : reservations) {
             LocalDateTime reservationDateTime = DateTimeUtil.convertStringToDateTime(reservation.getDate(), reservation.getTime().trim());
-            log.info("Checking reservation: ID=" + reservation.getUserID() + ", DateTime=" + reservationDateTime);
+            log.info("Checking reservation: ID=" + reservation.getUser_().getID() + ", DateTime=" + reservationDateTime);
             if (reservationDateTime.isAfter(now) && reservationDateTime.isBefore(oneDayLater)) {
 
                 log.info("INSIDE IF");
-                User_ user = userRepo.findById(reservation.getUserID())
-                        .orElseThrow(() -> new RuntimeException("User not found with ID: " + reservation.getUserID()));
-                log.info("Befire email");
+
+                // Access the User_ entity directly through the reservation entity
+                User_ user = reservation.getUser_();
+                log.info("User found with ID: " + user.getID());
+                
                 String userEmail = user.getEmail();
                 log.info("User email found: " + userEmail);
-
+                
                 String message = "Reminder: You have a reservation at " + reservation.getTime() + " on " + reservation.getDate();
-                emailService.sendSimpleEmail(userEmail, "Upcoming Resturant Reservation", message);
+                emailService.sendSimpleEmail(userEmail, "Upcoming Restaurant Reservation", message);
+                log.info("Sent email to: " + userEmail);
 
             } else {
-                log.info("Reservation ID=" + reservation.getUserID() + " is not within the notification window.");
+                log.info("Reservation ID=" + reservation.getUser_().getID()+ " is not within the notification window.");
             }
         }
     }

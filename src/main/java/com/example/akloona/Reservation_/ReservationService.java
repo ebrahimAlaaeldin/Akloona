@@ -35,7 +35,7 @@ public class ReservationService {
                     .time(request.getTime())
                     .tableStatus(tableStatusRepo.findById(request.getTableID())
                             .orElseThrow(() -> new IllegalStateException("Table not found")))
-                    .user(user)
+                    .user_(user)
                     .guestCount(request.getGuestCount())
                     .isConfirmed(true)
                     .isCancelled(false)
@@ -44,7 +44,6 @@ public class ReservationService {
 
             reservationRepo.save(reservation);
             reservation.getTableStatus().setReserved(true); // Set table as reserved when reservation is created
-            user.addReservation(reservation);// Add reservation to user
             userRepo.save(user); // Save user with reservation
             return "Reservation created successfully\n your Reservation ID is " + reservation.getID();
 
@@ -58,7 +57,7 @@ public class ReservationService {
         Reservation reservation = reservationRepo.findById(request.getReservationID())
                 .orElseThrow(() -> new IllegalStateException("Reservation not found"));
 
-        if (reservation.getUser().getUsername().equals(username)) {
+        if (reservation.getUser_().getUsername().equals(username)) {
             reservation.setDate(request.getDate());
             reservation.setTime(request.getTime());
             reservation.setTableStatus(tableStatusRepo.findById(request.getTableID())
@@ -104,7 +103,10 @@ public class ReservationService {
         String username = jwtService.extractUsername(token);
         User_ user = userRepo.findByUsername(username)
                 .orElseThrow(() -> new IllegalStateException("User not found"));
-        List<Reservation> reservations = user.getReservations();
+    
+        // Retrieve the user's reservations directly using the user object
+        List<Reservation> reservations = reservationRepo.findByUser_(user);
+    
         return reservations;
     }
 }

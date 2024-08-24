@@ -9,4 +9,5 @@ import java.util.List;
 public interface ReservationRepo extends JpaRepository<Reservation,Integer> {
     Reservation findByUserIDAndDateAndTimeAndTableID(int userID, String date, String time, int tableID);
     List<Reservation> findByDateAndTime(String date, String time);
+    List<Reservation> findByUser_(User_ user_);
 }

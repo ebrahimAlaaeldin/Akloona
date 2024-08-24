@@ -76,7 +76,7 @@ public class AuthenticationService {
         var user = userRepo.findByUsername(request.getUsername())
                 .orElseThrow(() -> new RuntimeException("User not found"));
         var jwtToken = jwtService.generateToken(user);
-        var token = tokenRepository.findByUser_id(user.getId());
+        var token = tokenRepository.findByUser_id(user.getID());
         if (token.isPresent()) {
             token.get().setToken(jwtToken);
             token.get().setExpired(false);
@@ -125,7 +125,7 @@ public class AuthenticationService {
     }
 
     private void revokeAllUserTokens(User_ user) {
-        var validUserTokens = tokenRepository.findAllValidTokenByUser(user.getId());
+        var validUserTokens = tokenRepository.findAllValidTokenByUser(user.getID());
         if (validUserTokens.isEmpty())
             return;
         validUserTokens.forEach(token -> {
