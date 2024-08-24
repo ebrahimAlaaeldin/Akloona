@@ -40,8 +40,9 @@ public class Reservation {
 
     }
 
-
-
-
+    public int getUserID()
+    {
+        return this.userID;
+    }
 
 }

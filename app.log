@@ -1,0 +1,118 @@
+2024-08-24T14:52:21.259+03:00  INFO 33048 --- [Akloona] [main] com.example.akloona.AkloonaApplication   : Starting AkloonaApplication using Java 17.0.11 with PID 33048 (C:\Users\omr\Documents\GitHub\Akloona\target\classes started by omr in C:\Users\omr\Documents\GitHub\Akloona)
+2024-08-24T14:52:21.263+03:00  INFO 33048 --- [Akloona] [main] com.example.akloona.AkloonaApplication   : No active profile set, falling back to 1 default profile: "default"
+2024-08-24T14:52:22.843+03:00  INFO 33048 --- [Akloona] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-08-24T14:52:22.983+03:00  INFO 33048 --- [Akloona] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 123 ms. Found 6 JPA repository interfaces.
+2024-08-24T14:52:24.082+03:00  INFO 33048 --- [Akloona] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2024-08-24T14:52:24.108+03:00  INFO 33048 --- [Akloona] [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2024-08-24T14:52:24.109+03:00  INFO 33048 --- [Akloona] [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.26]
+2024-08-24T14:52:24.264+03:00  INFO 33048 --- [Akloona] [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2024-08-24T14:52:24.265+03:00  INFO 33048 --- [Akloona] [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 2924 ms
+2024-08-24T14:52:24.493+03:00  INFO 33048 --- [Akloona] [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-08-24T14:52:24.606+03:00  INFO 33048 --- [Akloona] [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.5.2.Final
+2024-08-24T14:52:24.674+03:00  INFO 33048 --- [Akloona] [main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2024-08-24T14:52:25.161+03:00  INFO 33048 --- [Akloona] [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2024-08-24T14:52:25.208+03:00  INFO 33048 --- [Akloona] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2024-08-24T14:52:25.486+03:00  INFO 33048 --- [Akloona] [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@2bdcfcf
+2024-08-24T14:52:25.488+03:00  INFO 33048 --- [Akloona] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2024-08-24T14:52:27.061+03:00  INFO 33048 --- [Akloona] [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2024-08-24T14:52:27.183+03:00  WARN 33048 --- [Akloona] [main] o.h.engine.jdbc.spi.SqlExceptionHelper   : SQL Warning Code: 0, SQLState: 00000
+2024-08-24T14:52:27.184+03:00  WARN 33048 --- [Akloona] [main] o.h.engine.jdbc.spi.SqlExceptionHelper   : constraint "ukpddrhgwxnms2aceeku9s2ewy5" of relation "token" does not exist, skipping
+2024-08-24T14:52:27.220+03:00  INFO 33048 --- [Akloona] [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-08-24T14:52:27.616+03:00  INFO 33048 --- [Akloona] [main] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
+2024-08-24T14:52:29.637+03:00  INFO 33048 --- [Akloona] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path '/'
+2024-08-24T14:52:29.650+03:00  INFO 33048 --- [Akloona] [main] com.example.akloona.AkloonaApplication   : Started AkloonaApplication in 9.007 seconds (process running for 9.591)
+2024-08-24T14:53:52.388+03:00  INFO 33048 --- [Akloona] [http-nio-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2024-08-24T14:53:52.389+03:00  INFO 33048 --- [Akloona] [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2024-08-24T14:53:52.391+03:00  INFO 33048 --- [Akloona] [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
+2024-08-24T14:53:52.414+03:00  WARN 33048 --- [Akloona] [http-nio-8080-exec-1] o.s.w.s.h.HandlerMappingIntrospector     : Cache miss for REQUEST dispatch to '/api/tables/create' (previous null). Performing CorsConfiguration lookup. This is logged once only at WARN level, and every time at TRACE.
+2024-08-24T14:53:52.442+03:00  WARN 33048 --- [Akloona] [http-nio-8080-exec-1] o.s.w.s.h.HandlerMappingIntrospector     : Cache miss for REQUEST dispatch to '/api/tables/create' (previous null). Performing MatchableHandlerMapping lookup. This is logged once only at WARN level, and every time at TRACE.
+2024-08-24T14:58:00.002+03:00  INFO 33048 --- [Akloona] [http-nio-8080-exec-5] c.e.a.A.AuthenticationService            : Registering user: sara
+2024-08-24T14:58:55.332+03:00  INFO 33048 --- [Akloona] [http-nio-8080-exec-7] c.e.a.A.JwtAuthenticationFilter          : User authenticated: UsernamePasswordAuthenticationToken [Principal=User_(ID=102, username=sara, password=$2a$10$KONrX6bHZykkDKz7ILaUPeGx6ccCYNK5w5fvHA5CHxSc9QJhpzsJC, email=ebrahim.alaa26@gmail.com, phoneNumber=01122334455, address=12 Elm Street, accountType=User, dob=1998, age=0, role=CUSTOMER), Credentials=[PROTECTED], Authenticated=true, Details=null, Granted Authorities=[ROLE_CUSTOMER]]
+2024-08-24T14:58:55.346+03:00  INFO 33048 --- [Akloona] [http-nio-8080-exec-7] c.e.akloona.Profile.ProfileController    : Change phone number request: 01501681512
+2024-08-24T15:03:09.565+03:00  INFO 36412 --- [Akloona] [main] com.example.akloona.AkloonaApplication   : Starting AkloonaApplication using Java 17.0.11 with PID 36412 (C:\Users\omr\Documents\GitHub\Akloona\target\classes started by omr in C:\Users\omr\Documents\GitHub\Akloona)
+2024-08-24T15:03:09.567+03:00  INFO 36412 --- [Akloona] [main] com.example.akloona.AkloonaApplication   : No active profile set, falling back to 1 default profile: "default"
+2024-08-24T15:03:10.406+03:00  INFO 36412 --- [Akloona] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-08-24T15:03:10.516+03:00  INFO 36412 --- [Akloona] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 100 ms. Found 6 JPA repository interfaces.
+2024-08-24T15:03:11.221+03:00  INFO 36412 --- [Akloona] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2024-08-24T15:03:11.234+03:00  INFO 36412 --- [Akloona] [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2024-08-24T15:03:11.235+03:00  INFO 36412 --- [Akloona] [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.26]
+2024-08-24T15:03:11.336+03:00  INFO 36412 --- [Akloona] [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2024-08-24T15:03:11.336+03:00  INFO 36412 --- [Akloona] [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1714 ms
+2024-08-24T15:03:11.500+03:00  INFO 36412 --- [Akloona] [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-08-24T15:03:11.575+03:00  INFO 36412 --- [Akloona] [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.5.2.Final
+2024-08-24T15:03:11.619+03:00  INFO 36412 --- [Akloona] [main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2024-08-24T15:03:12.011+03:00  INFO 36412 --- [Akloona] [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2024-08-24T15:03:12.054+03:00  INFO 36412 --- [Akloona] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2024-08-24T15:03:12.259+03:00  INFO 36412 --- [Akloona] [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@1d7f2f0a
+2024-08-24T15:03:12.261+03:00  INFO 36412 --- [Akloona] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2024-08-24T15:03:13.434+03:00  INFO 36412 --- [Akloona] [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2024-08-24T15:03:13.528+03:00  INFO 36412 --- [Akloona] [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-08-24T15:03:13.830+03:00  INFO 36412 --- [Akloona] [main] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
+2024-08-24T15:03:15.084+03:00  INFO 36412 --- [Akloona] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path '/'
+2024-08-24T15:03:15.093+03:00  INFO 36412 --- [Akloona] [main] com.example.akloona.AkloonaApplication   : Started AkloonaApplication in 6.001 seconds (process running for 6.472)
+2024-08-24T15:06:34.481+03:00  INFO 3408 --- [Akloona] [main] com.example.akloona.AkloonaApplication   : Starting AkloonaApplication using Java 17.0.11 with PID 3408 (C:\Users\omr\Documents\GitHub\Akloona\target\classes started by omr in C:\Users\omr\Documents\GitHub\Akloona)
+2024-08-24T15:06:34.486+03:00  INFO 3408 --- [Akloona] [main] com.example.akloona.AkloonaApplication   : No active profile set, falling back to 1 default profile: "default"
+2024-08-24T15:06:35.365+03:00  INFO 3408 --- [Akloona] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-08-24T15:06:35.469+03:00  INFO 3408 --- [Akloona] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 92 ms. Found 6 JPA repository interfaces.
+2024-08-24T15:06:36.238+03:00  INFO 3408 --- [Akloona] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2024-08-24T15:06:36.251+03:00  INFO 3408 --- [Akloona] [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2024-08-24T15:06:36.252+03:00  INFO 3408 --- [Akloona] [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.26]
+2024-08-24T15:06:36.356+03:00  INFO 3408 --- [Akloona] [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2024-08-24T15:06:36.357+03:00  INFO 3408 --- [Akloona] [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1802 ms
+2024-08-24T15:06:36.520+03:00  INFO 3408 --- [Akloona] [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-08-24T15:06:36.590+03:00  INFO 3408 --- [Akloona] [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.5.2.Final
+2024-08-24T15:06:36.635+03:00  INFO 3408 --- [Akloona] [main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2024-08-24T15:06:36.972+03:00  INFO 3408 --- [Akloona] [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2024-08-24T15:06:37.020+03:00  INFO 3408 --- [Akloona] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2024-08-24T15:06:37.206+03:00  INFO 3408 --- [Akloona] [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@5a6195b8
+2024-08-24T15:06:37.208+03:00  INFO 3408 --- [Akloona] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2024-08-24T15:06:38.279+03:00  INFO 3408 --- [Akloona] [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2024-08-24T15:06:38.354+03:00  INFO 3408 --- [Akloona] [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-08-24T15:06:38.672+03:00  INFO 3408 --- [Akloona] [main] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
+2024-08-24T15:06:39.980+03:00  INFO 3408 --- [Akloona] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path '/'
+2024-08-24T15:06:39.992+03:00  INFO 3408 --- [Akloona] [main] com.example.akloona.AkloonaApplication   : Started AkloonaApplication in 6.027 seconds (process running for 6.497)
+2024-08-24T15:06:39.997+03:00  INFO 3408 --- [Akloona] [scheduling-1] c.e.a.S.ReservationNotificationService   : sendUpcomingReservationNotifications.Current time: 2024-08-24T15:06:39.997891700
+2024-08-24T15:06:39.998+03:00  INFO 3408 --- [Akloona] [scheduling-1] c.e.a.S.ReservationNotificationService   : sendUpcomingReservationNotifications.Notification window: 2024-08-24T15:06:39.997891700 to 2024-08-25T15:06:39.997891700
+2024-08-24T15:06:40.106+03:00  INFO 3408 --- [Akloona] [scheduling-1] c.e.a.S.ReservationNotificationService   : Number of reservations fetched: 3
+2024-08-24T15:06:40.110+03:00  INFO 3408 --- [Akloona] [scheduling-1] c.e.a.S.ReservationNotificationService   : Checking reservation: ID=2, DateTime=2024-08-23T13:10
+2024-08-24T15:06:40.110+03:00  INFO 3408 --- [Akloona] [scheduling-1] c.e.a.S.ReservationNotificationService   : Reservation ID=2 is not within the notification window.
+2024-08-24T15:06:40.111+03:00  INFO 3408 --- [Akloona] [scheduling-1] c.e.a.S.ReservationNotificationService   : Checking reservation: ID=2, DateTime=2024-08-25T11:00
+2024-08-24T15:06:40.111+03:00  INFO 3408 --- [Akloona] [scheduling-1] c.e.a.S.ReservationNotificationService   : INSIDE IF
+2024-08-24T15:06:40.127+03:00  INFO 3408 --- [Akloona] [scheduling-1] c.e.a.S.ReservationNotificationService   : Befire email
+2024-08-24T15:06:40.128+03:00  INFO 3408 --- [Akloona] [scheduling-1] c.e.a.S.ReservationNotificationService   : User email found: omaressam.ee12@gmail.com
+2024-08-24T15:06:40.129+03:00  INFO 3408 --- [Akloona] [scheduling-1] c.example.akloona.Service.EmailService   : sendSimpleEmail: INSIDE
+2024-08-24T15:06:40.176+03:00  INFO 3408 --- [Akloona] [scheduling-1] c.example.akloona.Service.EmailService   : sendSimpleEmail: try to send email to: omaressam.ee12@gmail.com
+2024-08-24T15:06:40.177+03:00  INFO 3408 --- [Akloona] [scheduling-1] c.example.akloona.Service.EmailService   : sendSimpleEmail: try to send email subject: Upcoming Resturant Reservation
+2024-08-24T15:06:40.177+03:00  INFO 3408 --- [Akloona] [scheduling-1] c.example.akloona.Service.EmailService   : sendSimpleEmail: try to send email message: Reminder: You have a reservation at 11:00 on 2024-08-25
+2024-08-24T15:06:54.884+03:00  INFO 3408 --- [Akloona] [scheduling-1] c.example.akloona.Service.EmailService   : Email sent successfully to omaressam.ee12@gmail.com
+2024-08-24T15:06:54.885+03:00  INFO 3408 --- [Akloona] [scheduling-1] c.e.a.S.ReservationNotificationService   : Checking reservation: ID=102, DateTime=2024-08-25T14:00
+2024-08-24T15:06:54.886+03:00  INFO 3408 --- [Akloona] [scheduling-1] c.e.a.S.ReservationNotificationService   : INSIDE IF
+2024-08-24T15:06:54.896+03:00  INFO 3408 --- [Akloona] [scheduling-1] c.e.a.S.ReservationNotificationService   : Befire email
+2024-08-24T15:06:54.897+03:00  INFO 3408 --- [Akloona] [scheduling-1] c.e.a.S.ReservationNotificationService   : User email found: ebrahim.alaa26@gmail.com
+2024-08-24T15:06:54.897+03:00  INFO 3408 --- [Akloona] [scheduling-1] c.example.akloona.Service.EmailService   : sendSimpleEmail: INSIDE
+2024-08-24T15:06:54.899+03:00  INFO 3408 --- [Akloona] [scheduling-1] c.example.akloona.Service.EmailService   : sendSimpleEmail: try to send email to: ebrahim.alaa26@gmail.com
+2024-08-24T15:06:54.899+03:00  INFO 3408 --- [Akloona] [scheduling-1] c.example.akloona.Service.EmailService   : sendSimpleEmail: try to send email subject: Upcoming Resturant Reservation
+2024-08-24T15:06:54.900+03:00  INFO 3408 --- [Akloona] [scheduling-1] c.example.akloona.Service.EmailService   : sendSimpleEmail: try to send email message: Reminder: You have a reservation at 14:00 on 2024-08-25
+2024-08-24T15:07:08.538+03:00  INFO 3408 --- [Akloona] [scheduling-1] c.example.akloona.Service.EmailService   : Email sent successfully to ebrahim.alaa26@gmail.com
+2024-08-24T15:07:39.998+03:00  INFO 3408 --- [Akloona] [scheduling-1] c.e.a.S.ReservationNotificationService   : sendUpcomingReservationNotifications.Current time: 2024-08-24T15:07:39.998296200
+2024-08-24T15:07:40.000+03:00  INFO 3408 --- [Akloona] [scheduling-1] c.e.a.S.ReservationNotificationService   : sendUpcomingReservationNotifications.Notification window: 2024-08-24T15:07:39.998296200 to 2024-08-25T15:07:39.998296200
+2024-08-24T15:07:40.010+03:00  INFO 3408 --- [Akloona] [scheduling-1] c.e.a.S.ReservationNotificationService   : Number of reservations fetched: 3
+2024-08-24T15:07:40.012+03:00  INFO 3408 --- [Akloona] [scheduling-1] c.e.a.S.ReservationNotificationService   : Checking reservation: ID=2, DateTime=2024-08-23T13:10
+2024-08-24T15:07:40.012+03:00  INFO 3408 --- [Akloona] [scheduling-1] c.e.a.S.ReservationNotificationService   : Reservation ID=2 is not within the notification window.
+2024-08-24T15:07:40.014+03:00  INFO 3408 --- [Akloona] [scheduling-1] c.e.a.S.ReservationNotificationService   : Checking reservation: ID=2, DateTime=2024-08-25T11:00
+2024-08-24T15:07:40.015+03:00  INFO 3408 --- [Akloona] [scheduling-1] c.e.a.S.ReservationNotificationService   : INSIDE IF
+2024-08-24T15:07:40.020+03:00  INFO 3408 --- [Akloona] [scheduling-1] c.e.a.S.ReservationNotificationService   : Befire email
+2024-08-24T15:07:40.020+03:00  INFO 3408 --- [Akloona] [scheduling-1] c.e.a.S.ReservationNotificationService   : User email found: omaressam.ee12@gmail.com
+2024-08-24T15:07:40.021+03:00  INFO 3408 --- [Akloona] [scheduling-1] c.example.akloona.Service.EmailService   : sendSimpleEmail: INSIDE
+2024-08-24T15:07:40.022+03:00  INFO 3408 --- [Akloona] [scheduling-1] c.example.akloona.Service.EmailService   : sendSimpleEmail: try to send email to: omaressam.ee12@gmail.com
+2024-08-24T15:07:40.023+03:00  INFO 3408 --- [Akloona] [scheduling-1] c.example.akloona.Service.EmailService   : sendSimpleEmail: try to send email subject: Upcoming Resturant Reservation
+2024-08-24T15:07:40.024+03:00  INFO 3408 --- [Akloona] [scheduling-1] c.example.akloona.Service.EmailService   : sendSimpleEmail: try to send email message: Reminder: You have a reservation at 11:00 on 2024-08-25
+2024-08-24T15:07:53.913+03:00  INFO 3408 --- [Akloona] [scheduling-1] c.example.akloona.Service.EmailService   : Email sent successfully to omaressam.ee12@gmail.com
+2024-08-24T15:07:53.913+03:00  INFO 3408 --- [Akloona] [scheduling-1] c.e.a.S.ReservationNotificationService   : Checking reservation: ID=102, DateTime=2024-08-25T14:00
+2024-08-24T15:07:53.914+03:00  INFO 3408 --- [Akloona] [scheduling-1] c.e.a.S.ReservationNotificationService   : INSIDE IF
+2024-08-24T15:07:53.916+03:00  INFO 3408 --- [Akloona] [scheduling-1] c.e.a.S.ReservationNotificationService   : Befire email
+2024-08-24T15:07:53.917+03:00  INFO 3408 --- [Akloona] [scheduling-1] c.e.a.S.ReservationNotificationService   : User email found: ebrahim.alaa26@gmail.com
+2024-08-24T15:07:53.917+03:00  INFO 3408 --- [Akloona] [scheduling-1] c.example.akloona.Service.EmailService   : sendSimpleEmail: INSIDE
+2024-08-24T15:07:53.918+03:00  INFO 3408 --- [Akloona] [scheduling-1] c.example.akloona.Service.EmailService   : sendSimpleEmail: try to send email to: ebrahim.alaa26@gmail.com
+2024-08-24T15:07:53.919+03:00  INFO 3408 --- [Akloona] [scheduling-1] c.example.akloona.Service.EmailService   : sendSimpleEmail: try to send email subject: Upcoming Resturant Reservation
+2024-08-24T15:07:53.919+03:00  INFO 3408 --- [Akloona] [scheduling-1] c.example.akloona.Service.EmailService   : sendSimpleEmail: try to send email message: Reminder: You have a reservation at 14:00 on 2024-08-25
