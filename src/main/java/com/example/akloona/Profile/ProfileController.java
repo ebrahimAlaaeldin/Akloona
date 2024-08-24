@@ -1,10 +1,12 @@
 package com.example.akloona.Profile;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -13,17 +15,25 @@ import org.springframework.web.bind.annotation.*;
 @Getter
 @Slf4j // lombok annotation to create a logger instance
 
+
+
 public class ProfileController {
     private final ProfileUpdatesService profileUpdatesService;
 
-    @GetMapping("/hello")
-    public String hello() {
-        return "Hello World";
-    }
+
+    //possible PreAuthorize annotations to add to the following endpoints:
+//    @GetMapping("/hello")
+//    @PreAuthorize("hasRole('CUSTOMER')")
+//    @PreAuthorize("hasRole('STAFF')")
+//    @PreAuthorize("hasRole('MANAGER')")
+//    public String hello() {
+//
+//        return "Get:: adminConrtolelr";
+//    }
 
 
     @PutMapping("/change-password")
-    public ResponseEntity<String> changePassword(@RequestBody ChangePasswordRequest request) {
+    public ResponseEntity<String> changePassword(@RequestBody ChangePasswordRequest request, HttpServletRequest httpServletRequest) {
         log.info("Change password request: {}", request);
         return ResponseEntity.ok(profileUpdatesService.changePassword(request));
     }

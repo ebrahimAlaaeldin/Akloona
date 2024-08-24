@@ -36,11 +36,20 @@ public class AuthenticationService {
         try {
             // Log the registration attempt
             log.info("Registering user: {}", registerRequest.getUsername());
+
+            // Switch statement to determine the role of the user based on the account type
+            Role role = switch (registerRequest.getAccountType()) {
+                case "Customer" -> Role.CUSTOMER;
+                case "Staff" -> Role.STAFF;
+                case "Manager" -> Role.MANAGER;
+                default -> Role.CUSTOMER; // default case, in case none of the cases match
+            };
+
             var user = User_.builder()
                     .username(registerRequest.getUsername())
                     .password(passwordEncoder.encode(registerRequest.getPassword()))
                     .accountType(registerRequest.getAccountType())
-                    .role(Role.USER)
+                    .role(role)
                     .email(registerRequest.getEmail())
                     .phoneNumber(registerRequest.getPhoneNumber())
                     .address(registerRequest.getAddress())
