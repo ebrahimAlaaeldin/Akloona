@@ -62,7 +62,7 @@ public class TableStatusController {
         if (existingTableStatus.isPresent()) {
             TableStatus tableStatus = existingTableStatus.get();
             if (isReserved != null) {
-                tableStatus.setIsReserved(isReserved);
+                tableStatus.setReserved(isReserved);
                 message=message+"reservation, ";
             }
             if (capacity != null) {

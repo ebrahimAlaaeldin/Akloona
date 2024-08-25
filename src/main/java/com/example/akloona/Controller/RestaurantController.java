@@ -1,40 +1,49 @@
 package com.example.akloona.Controller;
 
-import com.example.akloona.Database.Restaurant;
-import com.example.akloona.Service.MainPage;
+import com.example.akloona.Dtos.RestaurantDTO;
+import jakarta.servlet.http.HttpServletRequest;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+
 
 @RestController
 @RequestMapping("/api/restaurant")
+@RequiredArgsConstructor
 public class RestaurantController {
 
     @Autowired
-    private final MainPage mainPage;
 
-    public RestaurantController(MainPage mainPage) {
-        this.mainPage = mainPage;
-    }
+    private final RestaurantService restaurantService;
 
     @PostMapping("/add")
-    public String addRestaurant(@RequestParam("name") String name,
-                                @RequestParam("address") String address,
-                                @RequestParam("phoneNumber") String phoneNumber) {
+    @PreAuthorize("hasRole('MANAGER')")
+    public ResponseEntity<String> addRestaurant(@RequestBody CreateRestaurantRequest request, HttpServletRequest httpServletRequest) {
+        return ResponseEntity.ok(restaurantService.addRestaurant(request, httpServletRequest));
+    }
+
+
+
+    @DeleteMapping("/delete/{name}")
+    @PreAuthorize("hasRole('MANAGER')")
+    public ResponseEntity<String> deleteRestaurant(@PathVariable("name") String name) {
         try {
-            mainPage.addRestaurant(name, address, phoneNumber);
-            return "Restaurant Added Successfully";
+            restaurantService.deleteRestaurant(name);
+            return ResponseEntity.ok("Restaurant Deleted Successfully");
         } catch (Exception e) {
-            return "Failed to Add Restaurant: " + e.getMessage();
+           return ResponseEntity.ok("Restaurant not found");
         }
     }
 
-    @DeleteMapping("/delete/{id}")
-    public String deleteRestaurant(@PathVariable("id") int id) {
-        try {
-            mainPage.deleteRestaurant(id);
-            return "Restaurant Deleted Successfully";
-        } catch (Exception e) {
-            return "Failed to Delete Restaurant: " + e.getMessage();
-        }
+    @GetMapping("/get-all")
+    @PreAuthorize("hasRole('MANAGER')")
+    public ResponseEntity<List<RestaurantDTO>> getAllRestaurants(HttpServletRequest httpServletRequest) {
+        List<RestaurantDTO> restaurants = restaurantService.getAllRestaurants(httpServletRequest);
+        return ResponseEntity.ok(restaurants);
     }
 }

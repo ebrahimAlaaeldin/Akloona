@@ -1,47 +1,50 @@
 package com.example.akloona.Database;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 @Data
-
+@Builder
+@AllArgsConstructor
 @Entity(name = "Reservation")
 @NoArgsConstructor
 public class Reservation {
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int ID;
-    @Column(name = "date", nullable = false)
+
+    @Column(name = "date", nullable = false)// eg. 2021-12-31
     private String date;
-    @Column(name = "time", nullable = false)
-    private String time;
-    @Column(name = "tableID", nullable = false)
-    private int tableID;
-    @Column(name = "userID", nullable = false)
-    private int userID;
-    @Column(name = "isConfirmed", nullable = false)
-    private boolean isConfirmed;
-    @Column(name = "isCancelled", nullable = false)
-    private boolean isCancelled;
+
+    @Column(name = "time", nullable = false) //eg. 14:30:00
+    private String  time;
+
     @Column(name = "guestCount", nullable = false)
-    private  int guestCount;
-
-    public Reservation(String date, String time, int tableID, int userID, int guestCount) {
-        this.date = date;
-        this.time = time;
-        this.tableID = tableID;
-        this.userID = userID;
-        this.guestCount = guestCount;
-        this.isConfirmed = false;
-        this.isCancelled = false;
-
-    }
+    private int guestCount;
 
 
 
 
+//    @Column(name = "startTime", nullable = false)
+//    private LocalTime startTime;
+//
+//    @Column(name = "endTime", nullable = false)
+//    private LocalTime endTime;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    private TableStatus tableStatus;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    private User_ user;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Restaurant restaurant;
 
 }
+
