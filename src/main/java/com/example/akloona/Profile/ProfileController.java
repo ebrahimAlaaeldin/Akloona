@@ -41,7 +41,7 @@ public class ProfileController {
     }
 
     @PutMapping("/change-email")
-    public ResponseEntity<String> changeEmail(@RequestParam String Email, HttpServletRequest httpServletRequest) {
+    public ResponseEntity<String> changeEmail(@RequestParam  String Email, HttpServletRequest httpServletRequest) {
         log.info("Change email request: {}", Email);
         return ResponseEntity.ok(profileUpdatesService.changeEmail(Email, httpServletRequest));
     }

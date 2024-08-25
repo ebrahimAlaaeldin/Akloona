@@ -7,7 +7,9 @@ import java.util.Optional;
 
 @Repository
 public interface RestaurantRepo extends JpaRepository<Restaurant, Integer> {
+
     Optional<Restaurant> findByName(String name);
 
     void deleteByName(String name);
+
 }

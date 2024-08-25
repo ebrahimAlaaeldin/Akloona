@@ -53,6 +53,7 @@ public class Restaurant {
             TableStatus tableStatus = TableStatus.builder()
                     .isReserved(false)
                     .restaurant(this)  // Associate each TableStatus with the Restaurant
+                    .capacity(6) //max capacity of the table
                     .build();
             tableStatuses.add(tableStatus);
         }

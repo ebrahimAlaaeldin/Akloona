@@ -1,4 +1,4 @@
-package com.example.akloona.Database;
+package com.example.akloona.Dtos;
 
 
 import lombok.AllArgsConstructor;

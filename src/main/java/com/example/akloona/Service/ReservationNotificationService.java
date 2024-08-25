@@ -42,13 +42,13 @@ public class ReservationNotificationService {
 
         for (Reservation reservation : reservations) {
             LocalDateTime reservationDateTime = DateTimeUtil.convertStringToDateTime(reservation.getDate(), reservation.getTime().trim());
-            log.info("Checking reservation: ID=" + reservation.getUser_().getID() + ", DateTime=" + reservationDateTime);
+            log.info("Checking reservation: ID=" + reservation.getUser().getID() + ", DateTime=" + reservationDateTime);
             if (reservationDateTime.isAfter(now) && reservationDateTime.isBefore(oneDayLater)) {
 
                 log.info("INSIDE IF");
 
                 // Access the User_ entity directly through the reservation entity
-                User_ user = reservation.getUser_();
+                User_ user = reservation.getUser();
                 log.info("User found with ID: " + user.getID());
 
                 String userEmail = user.getEmail();
@@ -59,7 +59,7 @@ public class ReservationNotificationService {
                 log.info("Sent email to: " + userEmail);
 
             } else {
-                log.info("Reservation ID=" + reservation.getUser_().getID()+ " is not within the notification window.");
+                log.info("Reservation ID=" + reservation.getUser().getID()+ " is not within the notification window.");
             }
         }
     }

@@ -2,6 +2,7 @@ package com.example.akloona.Controller;
 
 import com.example.akloona.Authentication.JwtService;
 import com.example.akloona.Database.*;
+import com.example.akloona.Dtos.RestaurantDTO;
 import com.example.akloona.Token.TokenRepo;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
@@ -9,7 +10,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 

@@ -23,7 +23,6 @@ public class TableStatus {
     private int capacity;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "tableStatus")
-
     private List<Reservation> reservations;
 
     @ManyToOne(fetch = FetchType.LAZY)

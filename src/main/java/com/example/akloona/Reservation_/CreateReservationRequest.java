@@ -13,9 +13,12 @@ import java.time.LocalDate;
 @Data
 public class CreateReservationRequest {
 
+    private String username;//only for Creating Reservation by Manager
 
-    private LocalDate date;
+    private String restaurantName;
+    private String date;
+    private String time;
     private int tableID;
-    private int GuestCount;
+    private int guestCount;
 
 }

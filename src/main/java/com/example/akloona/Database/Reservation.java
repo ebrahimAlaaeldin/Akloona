@@ -25,6 +25,12 @@ public class Reservation {
     @Column(name = "time", nullable = false) //eg. 14:30:00
     private String  time;
 
+    @Column(name = "guestCount", nullable = false)
+    private int guestCount;
+
+
+
+
 //    @Column(name = "startTime", nullable = false)
 //    private LocalTime startTime;
 //
@@ -35,7 +41,7 @@ public class Reservation {
     private TableStatus tableStatus;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    private User_ user_;
+    private User_ user;
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Restaurant restaurant;

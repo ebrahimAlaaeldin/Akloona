@@ -1,7 +1,6 @@
 package com.example.akloona.Controller;
 
-import com.example.akloona.Database.Restaurant;
-import com.example.akloona.Database.RestaurantDTO;
+import com.example.akloona.Dtos.RestaurantDTO;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
