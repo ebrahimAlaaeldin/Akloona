@@ -32,6 +32,8 @@ public class ProfileController {
 //    }
 
 
+
+
     @PutMapping("/change-password")
     public ResponseEntity<String> changePassword(@RequestBody ChangePasswordRequest request, HttpServletRequest httpServletRequest) {
         log.info("Change password request: {}", request);
@@ -51,11 +53,13 @@ public class ProfileController {
     }
 
     @PutMapping("/change-phoneNumber")
+    @PreAuthorize("hasRole('MANAGER')")
     public ResponseEntity<String> changePhoneNumber(@RequestParam String phoneNumber, HttpServletRequest httpServletRequest) {
         log.info("Change phone number request: {}", phoneNumber);
         return ResponseEntity.ok(profileUpdatesService.changePhoneNumber(phoneNumber, httpServletRequest));
     }
     @DeleteMapping("/delete-account")
+
     public ResponseEntity<String> deleteAccount(HttpServletRequest httpServletRequest) {
         return ResponseEntity.ok(profileUpdatesService.deleteAccount(httpServletRequest));
     }

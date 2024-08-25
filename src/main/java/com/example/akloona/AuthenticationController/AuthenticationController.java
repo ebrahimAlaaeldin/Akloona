@@ -10,7 +10,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import com.example.akloona.Service.MainPage;
 
 import java.io.IOException;
 
@@ -20,7 +19,7 @@ import java.io.IOException;
 @Getter
 public class AuthenticationController {
     @Autowired
-    private final MainPage mainPage;
+
     private final AuthenticationService authenticationService;
 
 

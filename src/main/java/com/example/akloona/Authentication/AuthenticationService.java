@@ -38,10 +38,11 @@ public class AuthenticationService {
             log.info("Registering user: {}", registerRequest.getUsername());
 
             // Switch statement to determine the role of the user based on the account type
-            Role role = switch (registerRequest.getAccountType()) {
-                case "Customer" -> Role.CUSTOMER;
-                case "Staff" -> Role.STAFF;
-                case "Manager" -> Role.MANAGER;
+            var roleString =registerRequest.getAccountType().toLowerCase();
+            Role role = switch (roleString) {
+                case "customer" -> Role.CUSTOMER;
+                case "staff" -> Role.STAFF;
+                case "manager" -> Role.MANAGER;
                 default -> Role.CUSTOMER; // default case, in case none of the cases match
             };
 
@@ -76,7 +77,7 @@ public class AuthenticationService {
         var user = userRepo.findByUsername(request.getUsername())
                 .orElseThrow(() -> new RuntimeException("User not found"));
         var jwtToken = jwtService.generateToken(user);
-        var token = tokenRepository.findByUser_id(user.getID());
+        var token = tokenRepository.findByUser_ID(user.getID());
         if (token.isPresent()) {
             token.get().setToken(jwtToken);
             token.get().setExpired(false);

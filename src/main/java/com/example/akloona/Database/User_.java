@@ -55,7 +55,8 @@ public class User_  implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Restaurant> restaurants;
 
     public void calculateAge(){
         this.age = LocalDate.now().getYear() - this.dob;
@@ -100,4 +101,7 @@ public class User_  implements UserDetails {
     }
 
 
+    public void addRestaurant(Restaurant restaurant) {
+        restaurants.add(restaurant);
+    }
 }

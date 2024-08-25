@@ -1,13 +1,12 @@
 package com.example.akloona.Database;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
+import org.springframework.data.jpa.repository.Query;
 
 import java.util.Optional;
-import java.util.List;
-@Repository
-public interface ReservationRepo extends JpaRepository<Reservation,Integer> {
-    Reservation findByUserIDAndDateAndTimeAndTableID(int userID, String date, String time, int tableID);
-    List<Reservation> findByDateAndTime(String date, String time);
-    List<Reservation> findByUser_(User_ user_);
+
+public interface ReservationRepo extends JpaRepository<Reservation, Integer> {
+
+    @Query("SELECT r FROM Reservation r WHERE r.user_.ID = :userId AND r.date = :date AND r.time = :time AND r.tableStatus.ID = :tableId")
+    Optional<Reservation> findByUser_IDAndDateAndTimeAndTableStatus_ID(int userId, String date, String time, int tableId);
 }
