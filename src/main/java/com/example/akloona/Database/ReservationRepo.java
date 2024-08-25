@@ -4,6 +4,8 @@ import org.apache.catalina.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import com.example.akloona.Enums.ReservationStatus;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -23,4 +25,6 @@ public interface ReservationRepo extends JpaRepository<Reservation, Integer> {
 
 
     List<Reservation> findAllByUser_ID(int userNotFound);
+
+    List<Reservation> findByStatus(ReservationStatus status);
 }

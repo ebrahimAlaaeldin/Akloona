@@ -5,6 +5,8 @@ import com.example.akloona.Database.*;
 
 import com.example.akloona.Dtos.ReservationDto;
 import com.example.akloona.Dtos.TableStatusDto;
+import com.example.akloona.Enums.ReservationStatus;
+
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -64,7 +66,7 @@ public class ReservationService {
                 .guestCount(request.getGuestCount())
                 .user(userRepo.findByUsername(jwtService.extractUsername(httpServletRequest.getHeader("Authorization").substring(7)))
                         .orElseThrow(() -> new IllegalStateException("User not found"))
-                )
+                ).status(ReservationStatus.BOOKED)
                 .build();
 
         reservationRepo.save(reservation);
