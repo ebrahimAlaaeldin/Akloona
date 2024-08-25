@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Clock;
 import java.time.LocalDateTime;
@@ -29,7 +30,8 @@ public class ReservationNotificationService {
 
     @Autowired
     private EmailService emailService;
-
+    
+    @Transactional
     public void sendUpcomingReservationNotifications() {
         LocalDateTime now = LocalDateTime.now();
         log.info("sendUpcomingReservationNotifications.Current time: " + now);
@@ -47,17 +49,22 @@ public class ReservationNotificationService {
 
                 log.info("INSIDE IF");
 
-                // Access the User_ entity directly through the reservation entity
-                User_ user = reservation.getUser();
-                log.info("User found with ID: " + user.getID());
+                try{
+                    // Access the User_ entity directly through the reservation entity
+                    User_ user = reservation.getUser();
+                    log.info("User found with ID: " + user.getID());
 
-                String userEmail = user.getEmail();
-                log.info("User email found: " + userEmail);
-
-                String message = "Reminder: You have a reservation at " + reservation.getTime() + " on " + reservation.getDate();
-                emailService.sendSimpleEmail(userEmail, "Upcoming Restaurant Reservation", message);
-                log.info("Sent email to: " + userEmail);
-
+                    String userEmail = user.getEmail();
+                    log.info("User email found: " + userEmail);
+                    
+                    String message = "Reminder: You have a reservation at " + reservation.getTime() + " on " + reservation.getDate();
+                    emailService.sendSimpleEmail(userEmail, "Upcoming Restaurant Reservation", message);
+                    log.info("Sent email to: " + userEmail);
+                }catch (Exception e)
+                {
+                    log.info("Eror: " + e.getMessage());
+                }
+                
             } else {
                 log.info("Reservation ID=" + reservation.getUser().getID()+ " is not within the notification window.");
             }
