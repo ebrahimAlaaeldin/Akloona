@@ -5,4 +5,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface RestaurantRepo extends JpaRepository<Restaurant,Integer> {
+    void deleteByName(String name);
 }

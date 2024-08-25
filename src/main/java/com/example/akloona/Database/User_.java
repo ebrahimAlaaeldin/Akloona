@@ -2,6 +2,7 @@ package com.example.akloona.Database;
 
 
 import com.example.akloona.Authentication.Role;
+import com.example.akloona.Token.Token;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -56,7 +57,12 @@ public class User_  implements UserDetails {
     private Role role;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Token> tokens;
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Restaurant> restaurants;
+
+
 
     public void calculateAge(){
         this.age = LocalDate.now().getYear() - this.dob;

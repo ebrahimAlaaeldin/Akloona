@@ -30,11 +30,11 @@ public class RestaurantController {
 
 
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/delete/{name}")
     @PreAuthorize("hasRole('MANAGER')")
-    public ResponseEntity<String> deleteRestaurant(@PathVariable("id") int id) {
+    public ResponseEntity<String> deleteRestaurant(@PathVariable("name") String name) {
         try {
-            restaurantService.deleteRestaurant(id);
+            restaurantService.deleteRestaurant(name);
             return ResponseEntity.ok("Restaurant Deleted Successfully");
         } catch (Exception e) {
            return ResponseEntity.ok("Restaurant not found");

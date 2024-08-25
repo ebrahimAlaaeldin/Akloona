@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
-
+@Slf4j
 public class RestaurantService {
 
     private final RestaurantRepo restaurantRepo;
@@ -69,10 +69,9 @@ public class RestaurantService {
 
 
     @Transactional
-    public void deleteRestaurant(int id) {
-        if (!restaurantRepo.existsById(id)) {
-            throw new RuntimeException("Restaurant with ID " + id + " not found");
-        }
-        restaurantRepo.deleteById(id);
+    public void deleteRestaurant(String name) {
+        log.info("Deleting restaurant with ID " + name);
+
+        restaurantRepo.deleteByName(name);
     }
 }
