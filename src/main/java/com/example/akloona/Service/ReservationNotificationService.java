@@ -41,7 +41,7 @@ public class ReservationNotificationService {
         log.info("Number of reservations fetched: " + reservations.size());
 
         for (Reservation reservation : reservations) {
-            LocalDateTime reservationDateTime = DateTimeUtil.convertStringToDateTime(reservation.getDate(), reservation.getStartTime().trim());
+            LocalDateTime reservationDateTime = DateTimeUtil.convertStringToDateTime(reservation.getDate(), reservation.getTime().trim());
             log.info("Checking reservation: ID=" + reservation.getUser_().getID() + ", DateTime=" + reservationDateTime);
             if (reservationDateTime.isAfter(now) && reservationDateTime.isBefore(oneDayLater)) {
 
@@ -50,11 +50,11 @@ public class ReservationNotificationService {
                 // Access the User_ entity directly through the reservation entity
                 User_ user = reservation.getUser_();
                 log.info("User found with ID: " + user.getID());
-                
+
                 String userEmail = user.getEmail();
                 log.info("User email found: " + userEmail);
-                
-                String message = "Reminder: You have a reservation at " + reservation.getStartTime() + " on " + reservation.getDate();
+
+                String message = "Reminder: You have a reservation at " + reservation.getTime() + " on " + reservation.getDate();
                 emailService.sendSimpleEmail(userEmail, "Upcoming Restaurant Reservation", message);
                 log.info("Sent email to: " + userEmail);
 

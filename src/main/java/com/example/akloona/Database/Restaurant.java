@@ -18,7 +18,6 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @Slf4j
-
 public class Restaurant {
 
     @Id
@@ -42,6 +41,8 @@ public class Restaurant {
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.DETACH)
     private User_ user;
+    @OneToMany(mappedBy = "restaurant", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Reservation> reservations;
 
     public void addTable(int noOfTables) {
 

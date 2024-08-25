@@ -1,29 +1,23 @@
-//package com.example.akloona.Reservation_;
-//
-//
-//import com.example.akloona.Service.MainPage;
-//import jakarta.servlet.http.HttpServletRequest;
-//import org.springframework.beans.factory.annotation.Autowired;
-//
-//import org.springframework.http.ResponseEntity;
-//import org.springframework.security.access.prepost.PreAuthorize;
-//import org.springframework.web.bind.annotation.*;
-//
-//@RestController
-//@RequestMapping("/api/reservation")
-//public class ReservationController {
-//
-//    @Autowired
-//    private final ReservationService reservationService;
-//
-//    @Autowired
-//    private final MainPage mainPage;
-//
-//    public ReservationController(ReservationService reservationService, MainPage mainPage) {
-//        this.reservationService = reservationService;
-//        this.mainPage = mainPage;
-//    }
-//
+package com.example.akloona.Reservation_;
+
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+@RequestMapping("/api/reservation")
+@RequiredArgsConstructor
+public class ReservationController {
+
+
+    private final ReservationService reservationService;
+
+    @GetMapping("/get-available-tables")
+    public ResponseEntity<?> getAvailableTables(AvailableTablesRequest request) {
+        return ResponseEntity.ok(reservationService.getAvailableTables(request));
+    }
+}
 //    @PostMapping("/create")
 //    @PreAuthorize("hasAnyRole('CUSTOMER')")
 //    public ResponseEntity<String> createReservation(CreateReservationRequest request,HttpServletRequest httpServletRequest) {

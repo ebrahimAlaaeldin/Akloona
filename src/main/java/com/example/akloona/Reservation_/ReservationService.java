@@ -1,54 +1,75 @@
-//package com.example.akloona.Reservation_;
-//
-//import com.example.akloona.Authentication.JwtService;
-//import com.example.akloona.Database.*;
-//import jakarta.servlet.http.HttpServletRequest;
-//import lombok.RequiredArgsConstructor;
-//import lombok.extern.slf4j.Slf4j;
-//import org.springframework.http.ResponseEntity;
-//import org.springframework.stereotype.Service;
-//import org.springframework.transaction.annotation.Transactional;
-//
-//import java.util.List;
-//
-//
-//@RequiredArgsConstructor
-//@Slf4j
-//@Service
-//public class ReservationService {
-//
-//    private final ReservationRepo reservationRepo;
-//    private final UserRepo userRepo;
-//    private final TableStatusRepo tableStatusRepo;
-//    private final JwtService jwtService;
-//
-//
+package com.example.akloona.Reservation_;
+
+import com.example.akloona.Authentication.JwtService;
+import com.example.akloona.Database.*;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
+
+@RequiredArgsConstructor
+@Slf4j
+@Service
+public class ReservationService {
+
+    private final ReservationRepo reservationRepo;
+    private final UserRepo userRepo;
+    private final TableStatusRepo tableStatusRepo;
+    private final JwtService jwtService;
+    private final RestaurantRepo restaurantRepo;
+
+
 //    @Transactional
 //    public String createReservation(CreateReservationRequest request, HttpServletRequest httpServletRequest) {
 //
 //
-//            String token = httpServletRequest.getHeader("Authorization").substring(7);
-//            String username = jwtService.extractUsername(token);
-//            User_ user = userRepo.findByUsername(username)
-//                    .orElseThrow(() -> new IllegalStateException("Reservation not found"));
-//            var reservation = Reservation.builder().date(request.getDate())
-//                    .time(request.getTime())
-//                    .tableStatus(tableStatusRepo.findById(request.getTableID())
-//                            .orElseThrow(() -> new IllegalStateException("Table not found")))
-//                    .user_(user)
-//                    .guestCount(request.getGuestCount())
-//                    .isConfirmed(true)
-//                    .isCancelled(false)
-//                    .build();
+//        String token = httpServletRequest.getHeader("Authorization").substring(7);
+//        String username = jwtService.extractUsername(token);
+//        User_ user = userRepo.findByUsername(username)
+//                .orElseThrow(() -> new IllegalStateException("Reservation not found"));
+//        var reservation = Reservation.builder().date(request.getDate())
+//                .startTime(request.getStartTime())
+//                .endTime(request.getEndTime())
+//                .tableStatus(tableStatusRepo.findById(request.getTableID())
+//                        .orElseThrow(() -> new IllegalStateException("Table not found")))
+//                .user_(user)
+//                .build();
+//        reservationRepo.save(reservation);
 //
-//
-//            reservationRepo.save(reservation);
-//            reservation.getTableStatus().setReserved(true); // Set table as reserved when reservation is created
-//            user.addReservation(reservation);// Add reservation to user
-//            userRepo.save(user); // Save user with reservation
-//            return "Reservation created successfully\n your Reservation ID is " + reservation.getID();
+//        return "Reservation created successfully\n your Reservation ID is " + reservation.getID();
 //
 //    }
+
+    @Transactional
+    public Object getAvailableTables(AvailableTablesRequest request) {
+        Restaurant restaurant = restaurantRepo.findByName(request.getRestaurantName())
+                .orElseThrow(() -> new IllegalStateException("Restaurant not found"));
+
+        List<Reservation> reservations = restaurant.getReservations(); // Corrected method name
+
+        List<TableStatus> reservedTables = new ArrayList<>();
+        for (Reservation reservation : reservations) {
+            if (reservation.getDate().equals(request.getDate())) {
+                reservedTables.add(reservation.getTableStatus());
+            }
+        }
+
+        List<TableStatus> availableTables = restaurant.getTables().stream()
+                .filter(table -> !reservedTables.contains(table))
+                .toList();
+
+        return availableTables;
+    }
+
+}
 //
 //    @Transactional
 //    public String updateReservation(UpdateReservationRequest request, HttpServletRequest httpServletRequest) {

@@ -29,6 +29,7 @@ public class RestaurantService {
         String username = jwtService.extractUsername(token);
         User_ user = userRepo.findByUsername(username).orElseThrow(() -> new RuntimeException("User not found"));
 
+
         Restaurant restaurant = Restaurant.builder()
                 .name(createRestaurantRequest.getName())
                 .address(createRestaurantRequest.getAddress())
