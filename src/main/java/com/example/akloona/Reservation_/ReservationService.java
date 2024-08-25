@@ -214,7 +214,8 @@ public class ReservationService {
         LocalDate now = LocalDate.now();
         // Compare the dates
         if (now.isBefore(reservationDate.minusDays(1))) {
-            reservationRepo.deleteById(request.getReservationID());
+            reservation.setStatus(ReservationStatus.CANCELED);
+            reservationRepo.save(reservation); // Save the updated reservation
             return "Reservation cancelled successfully";
         } else {
             return "Reservation cannot be cancelled";

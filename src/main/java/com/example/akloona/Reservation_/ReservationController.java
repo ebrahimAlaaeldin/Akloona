@@ -46,7 +46,7 @@ public class ReservationController {
         return ResponseEntity.ok(reservationService.makeReservationByManager(request,httpServletRequest));
     }
 
-    @DeleteMapping("/cancel-reservation")
+    @PostMapping("/cancel-reservation")
     @PreAuthorize("hasAnyRole('CUSTOMER')")
     public ResponseEntity<String> cancelReservation(@RequestBody CancelReservationRequest request,HttpServletRequest httpServletRequest) {
         return ResponseEntity.ok(reservationService.cancelReservation(request,httpServletRequest).toString());
