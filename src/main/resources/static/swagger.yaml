@@ -1,7 +1,7 @@
 openapi: 3.0.0
 info:
   title: Akloona API
-  description: API documentation for the Akloona's Restaurant Reservation System, Controllers In-use are AuthenticationController, RestaurantController, TableStatusController, ProfileController, ReservationController.
+  description: API documentation for the Akloona's Restaurant Reservation System, Controllers In-use are AuthenticationController, ProfileController, ReservationController, RestaurantController.
   version: 1.0.0
 servers:
   - url: /api
@@ -52,126 +52,6 @@ paths:
         '200':
           description: Token refreshed successfully
 
-  /restaurant/add:
-    post:
-      summary: Add a new restaurant
-      operationId: addRestaurant
-      requestBody:
-        description: Restaurant data
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/CreateRestaurantRequest'
-      responses:
-        '200':
-          description: Restaurant added successfully
-
-  /restaurant/delete/{name}:
-    delete:
-      summary: Delete a restaurant by name
-      operationId: deleteRestaurant
-      parameters:
-        - name: name
-          in: path
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: Restaurant deleted successfully
-
-  /restaurant/get-all:
-    get:
-      summary: Get all restaurants
-      operationId: getAllRestaurants
-      responses:
-        '200':
-          description: List of restaurants
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/RestaurantDTO'
-
-  /tables/create:
-    post:
-      summary: Create a new table status
-      operationId: createTableStatus
-      parameters:
-        - name: isReserved
-          in: query
-          required: true
-          schema:
-            type: boolean
-        - name: capacity
-          in: query
-          required: true
-          schema:
-            type: integer
-      responses:
-        '200':
-          description: Table created successfully
-
-  /tables/{id}:
-    get:
-      summary: Get table status by ID
-      operationId: getTableStatusById
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: integer
-      responses:
-        '200':
-          description: Table found
-
-  /tables/all:
-    get:
-      summary: Get all table statuses
-      operationId: getAllTableStatuses
-      responses:
-        '200':
-          description: List of table statuses
-
-  /tables/update:
-    put:
-      summary: Update a table status
-      operationId: updateTableStatus
-      parameters:
-        - name: id
-          in: query
-          required: true
-          schema:
-            type: integer
-        - name: isReserved
-          in: query
-          schema:
-            type: boolean
-        - name: capacity
-          in: query
-          schema:
-            type: integer
-      responses:
-        '200':
-          description: Table updated successfully
-
-  /tables/delete:
-    delete:
-      summary: Delete a table status
-      operationId: deleteTableStatus
-      parameters:
-        - name: id
-          in: query
-          required: true
-          schema:
-            type: integer
-      responses:
-        '200':
-          description: Table deleted successfully
-
   /profile/change-password:
     put:
       summary: Change user password
@@ -191,12 +71,13 @@ paths:
     put:
       summary: Change user email
       operationId: changeEmail
-      parameters:
-        - name: Email
-          in: query
-          required: true
-          schema:
-            type: string
+      requestBody:
+        description: Email change data
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChangeEmailRequest'
       responses:
         '200':
           description: Email changed successfully
@@ -205,12 +86,13 @@ paths:
     put:
       summary: Change user address
       operationId: changeAddress
-      parameters:
-        - name: address
-          in: query
-          required: true
-          schema:
-            type: string
+      requestBody:
+        description: Address change data
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChangeAddressRequest'
       responses:
         '200':
           description: Address changed successfully
@@ -219,12 +101,13 @@ paths:
     put:
       summary: Change user phone number
       operationId: changePhoneNumber
-      parameters:
-        - name: phoneNumber
-          in: query
-          required: true
-          schema:
-            type: string
+      requestBody:
+        description: Phone number change data
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChangePhoneNumberRequest'
       responses:
         '200':
           description: Phone number changed successfully
@@ -236,6 +119,36 @@ paths:
       responses:
         '200':
           description: Account deleted successfully
+
+  /profile/block-user:
+    delete:
+      summary: Block a user
+      operationId: blockUser
+      requestBody:
+        description: Block user request data
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BlockUserRequest'
+      responses:
+        '200':
+          description: User blocked successfully
+
+  /profile/unblock-user:
+    put:
+      summary: Unblock a user
+      operationId: unblockUser
+      requestBody:
+        description: Unblock user request data
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UnblockUserRequest'
+      responses:
+        '200':
+          description: User unblocked successfully
 
   /reservation/get-available-tables:
     get:
@@ -262,7 +175,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateReservationRequest'
+              $ref: '#/components/schemas/MakeReservationRequest'
       responses:
         '200':
           description: Reservation created successfully
@@ -285,7 +198,7 @@ paths:
   /reservation/get-My-Reservations:
     get:
       summary: Get reservations for the logged-in user
-      operationId: getReservationsForLoggedInUser
+      operationId: getMyReservations
       responses:
         '200':
           description: List of reservations for the logged-in user
@@ -300,7 +213,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateReservationRequest'
+              $ref: '#/components/schemas/MakeReservationRequest'
       responses:
         '200':
           description: Reservation created successfully
@@ -319,6 +232,50 @@ paths:
       responses:
         '200':
           description: Reservation cancelled successfully
+
+  /restaurant/add:
+    post:
+      summary: Add a new restaurant
+      operationId: addRestaurant
+      requestBody:
+        description: Restaurant data
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateRestaurantRequest'
+      responses:
+        '200':
+          description: Restaurant added successfully
+
+  /restaurant/delete:
+    delete:
+      summary: Delete a restaurant by name
+      operationId: deleteRestaurant
+      requestBody:
+        description: Restaurant deletion data
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeleteRestaurantRequest'
+      responses:
+        '200':
+          description: Restaurant deleted successfully
+
+  /restaurant/get-all:
+    get:
+      summary: Get all restaurants
+      operationId: getAllRestaurants
+      responses:
+        '200':
+          description: List of restaurants
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/RestaurantDTO'
 
 components:
   schemas:
@@ -346,35 +303,43 @@ components:
         password:
           type: string
 
-    CreateRestaurantRequest:
+    ChangePasswordRequest:
       type: object
       properties:
-        name:
+        oldPassword:
           type: string
-        location:
-          type: string
-        cuisineType:
+        newPassword:
           type: string
 
-    RestaurantDTO:
+    ChangeEmailRequest:
       type: object
       properties:
-        name:
-          type: string
-        location:
-          type: string
-        cuisineType:
+        email:
           type: string
 
-    TableStatus:
+    ChangeAddressRequest:
       type: object
       properties:
-        id:
-          type: integer
-        isReserved:
-          type: boolean
-        capacity:
-          type: integer
+        address:
+          type: string
+
+    ChangePhoneNumberRequest:
+      type: object
+      properties:
+        phoneNumber:
+          type: string
+
+    BlockUserRequest:
+      type: object
+      properties:
+        username:
+          type: string
+
+    UnblockUserRequest:
+      type: object
+      properties:
+        username:
+          type: string
 
     AvailableTablesRequest:
       type: object
@@ -387,7 +352,7 @@ components:
         partySize:
           type: integer
 
-    CreateReservationRequest:
+    MakeReservationRequest:
       type: object
       properties:
         restaurantName:
@@ -414,10 +379,28 @@ components:
         reservationId:
           type: integer
 
-    ChangePasswordRequest:
+    CreateRestaurantRequest:
       type: object
       properties:
-        oldPassword:
+        name:
           type: string
-        newPassword:
+        location:
+          type: string
+        cuisineType:
+          type: string
+
+    DeleteRestaurantRequest:
+      type: object
+      properties:
+        name:
+          type: string
+
+    RestaurantDTO:
+      type: object
+      properties:
+        name:
+          type: string
+        location:
+          type: string
+        cuisineType:
           type: string
