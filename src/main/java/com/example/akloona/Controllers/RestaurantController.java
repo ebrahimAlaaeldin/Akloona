@@ -1,6 +1,9 @@
-package com.example.akloona.Controller;
+package com.example.akloona.Controllers;
 
 import com.example.akloona.Dtos.RestaurantDTO;
+import com.example.akloona.Restaurant_.CreateRestaurantRequest;
+import com.example.akloona.Restaurant_.DeleteRestaurantRequest;
+import com.example.akloona.Service.RestaurantService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,11 +32,11 @@ public class RestaurantController {
 
 
 
-    @DeleteMapping("/delete/{name}")
+    @DeleteMapping("/delete")
     @PreAuthorize("hasRole('MANAGER')")
-    public ResponseEntity<String> deleteRestaurant(@PathVariable("name") String name) {
+    public ResponseEntity<String> deleteRestaurant(@RequestBody DeleteRestaurantRequest request) {
         try {
-            restaurantService.deleteRestaurant(name);
+            restaurantService.deleteRestaurant(request);
             return ResponseEntity.ok("Restaurant Deleted Successfully");
         } catch (Exception e) {
            return ResponseEntity.ok("Restaurant not found");

@@ -11,7 +11,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class CreateReservationRequest {
+public class MakeReservationRequest {
 
     private String username;//only for Creating Reservation by Manager
 

@@ -36,6 +36,11 @@ public class Restaurant {
     @Column(name = "number_of_tables", nullable = false)  // Updated column name
     private int numberOfTables;
 
+    @Column(name = "open_at", nullable = false)
+    private String openingTime;
+    @Column(name = "close_at", nullable = false)
+    private String closingTime;
+
     @OneToMany(mappedBy = "restaurant", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<TableStatus> tables;
 
@@ -51,7 +56,6 @@ public class Restaurant {
         List<TableStatus> tableStatuses = new ArrayList<>();
         for (int i = 1; i <= noOfTables; i++) {
             TableStatus tableStatus = TableStatus.builder()
-                    .isReserved(false)
                     .restaurant(this)  // Associate each TableStatus with the Restaurant
                     .capacity(6) //max capacity of the table
                     .build();

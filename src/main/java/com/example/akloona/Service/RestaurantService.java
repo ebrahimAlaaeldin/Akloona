@@ -1,8 +1,10 @@
-package com.example.akloona.Controller;
+package com.example.akloona.Service;
 
 import com.example.akloona.Authentication.JwtService;
 import com.example.akloona.Database.*;
 import com.example.akloona.Dtos.RestaurantDTO;
+import com.example.akloona.Restaurant_.CreateRestaurantRequest;
+import com.example.akloona.Restaurant_.DeleteRestaurantRequest;
 import com.example.akloona.Token.TokenRepo;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
@@ -36,6 +38,8 @@ public class RestaurantService {
                 .phoneNumber(createRestaurantRequest.getPhoneNumber())
                 .numberOfTables(createRestaurantRequest.getNumberOfTables())
                 .user(user)
+                .openingTime(createRestaurantRequest.getOpeningTime())
+                .closingTime(createRestaurantRequest.getClosingTime())
                 .build();
 
         restaurant.addTable(createRestaurantRequest.getNumberOfTables());
@@ -70,9 +74,10 @@ public class RestaurantService {
 
 
     @Transactional
-    public void deleteRestaurant(String name) {
-        log.info("Deleting restaurant with ID " + name);
+    public void deleteRestaurant(DeleteRestaurantRequest request) {
+        log.info("Deleting restaurant with ID " + request.getRestaurantName());
 
-        restaurantRepo.deleteByName(name);
+        restaurantRepo.deleteByName(request.getRestaurantName());
+
     }
 }

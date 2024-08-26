@@ -1,5 +1,6 @@
-package com.example.akloona.Authentication;
+package com.example.akloona.Enums;
 
+import com.example.akloona.Authentication.Permission;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

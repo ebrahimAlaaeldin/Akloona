@@ -1,7 +1,11 @@
-package com.example.akloona.Profile;
+package com.example.akloona.Service;
 
 import com.example.akloona.Authentication.JwtService;
 import com.example.akloona.Database.UserRepo;
+import com.example.akloona.Database.User_;
+import com.example.akloona.Enums.UserStatus;
+import com.example.akloona.Profile.*;
+import com.example.akloona.Token.Token;
 import com.example.akloona.Token.TokenRepo;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -35,26 +39,26 @@ public class ProfileUpdatesService {
         return "Password changed successfully";
     }
 
-    public String changeEmail(String Email, HttpServletRequest httpServletRequest) {
+    public String changeEmail(ChangeEmailRequest request, HttpServletRequest httpServletRequest) {
         String token = httpServletRequest.getHeader("Authorization").substring(7);
         String username = jwtService.extractUsername(token);
 
         var user = userRepo.findByUsername(username).orElseThrow(
                 () -> new RuntimeException("User not found")
         );
-        user.setEmail(Email);
+        user.setEmail(request.getNewEmail());
         userRepo.save(user);
         return "Email changed successfully";
     }
 
-    public String changeAddress(String address, HttpServletRequest httpServletRequest) {
+    public String changeAddress(ChangeAddressRequest request, HttpServletRequest httpServletRequest) {
         String token = httpServletRequest.getHeader("Authorization").substring(7);
         String username = jwtService.extractUsername(token);
 
         var user = userRepo.findByUsername(username).orElseThrow(
                 () -> new RuntimeException("User not found")
         );
-        user.setAddress(address);
+        user.setAddress(request.getNewAddress());
         userRepo.save(user);
         return "Address changed successfully";
     }
@@ -72,15 +76,60 @@ public class ProfileUpdatesService {
         return "Account deleted successfully";
     }
 
-    public String changePhoneNumber(String phoneNumber, HttpServletRequest httpServletRequest) {
+    public String changePhoneNumber(ChangePhoneNumberRequest request, HttpServletRequest httpServletRequest) {
         String token = httpServletRequest.getHeader("Authorization").substring(7);
         String username = jwtService.extractUsername(token);
 
         var user = userRepo.findByUsername(username).orElseThrow(
                 () -> new RuntimeException("User not found")
         );
-        user.setPhoneNumber(phoneNumber);
+        user.setPhoneNumber(request.getNewPhoneNumber());
         userRepo.save(user);
         return "Phone number changed successfully";
+    }
+
+    public Object blockUser(BlockUserRequest request) {
+        var userToBlock = userRepo.findByUsername(request.getUsername()).orElseThrow(
+                () -> new RuntimeException("User not found")
+        );
+
+        revokeAllTokens((User_) userToBlock);
+        userToBlock.setStatus(UserStatus.BLOCKED);
+        userRepo.save(userToBlock);
+        return "User blocked successfully";
+    }
+
+
+    public Object unblockUser(UnblockUserRequest request) {
+
+        var userToUnblock = userRepo.findByUsername(request.getUsername()).orElseThrow(
+                () -> new RuntimeException("User not found")
+        );
+
+        activateAllTokens((User_) userToUnblock);
+        userToUnblock.setStatus(UserStatus.ACTIVE);
+        userRepo.save(userToUnblock);
+        return "User unblocked successfully";
+    }
+
+    private void activateAllTokens(User_ userToUnblock) {
+
+        tokenRepo.findAllByUser(userToUnblock)
+                .forEach(token -> {
+                    if (token instanceof Token) {
+                        ((Token) token).setRevoked(false); // Cast to Token type
+                        tokenRepo.save((Token) token);
+                    }
+                });
+    }
+
+    public void revokeAllTokens(User_ user) {
+        tokenRepo.findAllByUser(user)
+                .forEach(token -> {
+                    if (token instanceof Token) {
+                        ((Token) token).setRevoked(true); // Cast to Token type
+                        tokenRepo.save((Token) token);
+                    }
+                });
     }
 }

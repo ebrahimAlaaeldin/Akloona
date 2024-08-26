@@ -1,7 +1,9 @@
-package com.example.akloona.Profile;
+package com.example.akloona.Controllers;
 
+import com.example.akloona.Profile.*;
+import com.example.akloona.Service.LogoutService;
+import com.example.akloona.Service.ProfileUpdatesService;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,7 +22,7 @@ import org.springframework.web.bind.annotation.*;
 public class ProfileController {
     private final ProfileUpdatesService profileUpdatesService;
 
-
+/**
     //possible PreAuthorize annotations to add to the following endpoints:
 //    @GetMapping("/hello")
 //    @PreAuthorize("hasRole('CUSTOMER')")
@@ -29,7 +31,7 @@ public class ProfileController {
 //    public String hello() {
 //
 //        return "Get:: adminConrtolelr";
-//    }
+**/
 
 
 
@@ -41,27 +43,38 @@ public class ProfileController {
     }
 
     @PutMapping("/change-email")
-    public ResponseEntity<String> changeEmail(@RequestParam  String Email, HttpServletRequest httpServletRequest) {
-        log.info("Change email request: {}", Email);
-        return ResponseEntity.ok(profileUpdatesService.changeEmail(Email, httpServletRequest));
+    public ResponseEntity<String> changeEmail(ChangeEmailRequest request, HttpServletRequest httpServletRequest) {
+
+        return ResponseEntity.ok(profileUpdatesService.changeEmail(request, httpServletRequest));
     }
 
     @PutMapping("/change-address")
-    public String changeAddress(@RequestParam String address, HttpServletRequest httpServletRequest) {
-        log.info("Change address request: {}", address);
-        return profileUpdatesService.changeAddress(address, httpServletRequest);
+    public String changeAddress(@RequestBody ChangeAddressRequest request, HttpServletRequest httpServletRequest) {
+
+        return profileUpdatesService.changeAddress(request, httpServletRequest);
     }
 
     @PutMapping("/change-phoneNumber")
-    @PreAuthorize("hasRole('MANAGER')")
-    public ResponseEntity<String> changePhoneNumber(@RequestParam String phoneNumber, HttpServletRequest httpServletRequest) {
-        log.info("Change phone number request: {}", phoneNumber);
-        return ResponseEntity.ok(profileUpdatesService.changePhoneNumber(phoneNumber, httpServletRequest));
+    public ResponseEntity<String> changePhoneNumber(@RequestBody ChangePhoneNumberRequest request, HttpServletRequest httpServletRequest) {
+        return ResponseEntity.ok(profileUpdatesService.changePhoneNumber(request, httpServletRequest));
     }
     @DeleteMapping("/delete-account")
-
     public ResponseEntity<String> deleteAccount(HttpServletRequest httpServletRequest) {
         return ResponseEntity.ok(profileUpdatesService.deleteAccount(httpServletRequest));
     }
+
+    @DeleteMapping("/block-user")
+    @PreAuthorize("hasAnyRole('MANAGER','STAFF')")
+    public ResponseEntity<?> blockUser(@RequestBody BlockUserRequest request) {
+        return ResponseEntity.ok(profileUpdatesService.blockUser(request));
+    }
+
+    @PutMapping("/unblock-user")
+    @PreAuthorize("hasAnyRole('MANAGER','STAFF')")
+    public ResponseEntity<?> unblockUser(@RequestBody UnblockUserRequest request) {
+        return ResponseEntity.ok(profileUpdatesService.unblockUser(request));
+    }
+
+
 
 }

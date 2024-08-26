@@ -1,7 +1,10 @@
-package com.example.akloona.AuthenticationController;
+package com.example.akloona.Controllers;
 
 
-import com.example.akloona.Authentication.AuthenticationService;
+import com.example.akloona.AuthenticationController.AuthenticationRequest;
+import com.example.akloona.AuthenticationController.AuthenticationResponse;
+import com.example.akloona.AuthenticationController.RegisterRequest;
+import com.example.akloona.Service.AuthenticationService;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -9,6 +12,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -31,13 +35,14 @@ public class AuthenticationController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<AuthenticationResponse> authenticate(@RequestBody AuthenticationRequest request) {
-
+   public ResponseEntity<AuthenticationResponse> authenticate(@RequestBody AuthenticationRequest request) {
         return ResponseEntity.ok(authenticationService.authenticate(request));
 
     }
 
-    @PostMapping("/refresh-token") //
+
+    // if the user is logged in and its token is expired, this endpoint will be called to refresh the token
+    @PostMapping("/refresh-token")
     public void refreshToken(
             HttpServletRequest request,
             HttpServletResponse response

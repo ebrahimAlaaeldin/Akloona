@@ -1,4 +1,4 @@
-package com.example.akloona.Reservation_;
+package com.example.akloona.Service;
 
 import com.example.akloona.Authentication.JwtService;
 import com.example.akloona.Database.*;
@@ -7,6 +7,10 @@ import com.example.akloona.Dtos.ReservationDto;
 import com.example.akloona.Dtos.TableStatusDto;
 import com.example.akloona.Enums.ReservationStatus;
 
+import com.example.akloona.Reservation_.AvailableTablesRequest;
+import com.example.akloona.Reservation_.CancelReservationRequest;
+import com.example.akloona.Reservation_.MakeReservationRequest;
+import com.example.akloona.Reservation_.UserReservationsRequest;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -35,17 +39,46 @@ public class ReservationService {
     private final RestaurantRepo restaurantRepo;
 
 
+
+    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-M-d");
+
+
     @Transactional
-    public String makeReservation(CreateReservationRequest request, HttpServletRequest httpServletRequest) {
+    public boolean checkWithinRange (MakeReservationRequest request) {
         Restaurant restaurant = restaurantRepo.findByName(request.getRestaurantName())
                 .orElseThrow(() -> new IllegalStateException("Restaurant not found"));
 
-        if (request.getTableID() == 0) {
-            return "Table ID cannot be 0";
+        LocalDate now = LocalDate.now();
+        LocalDate reservationDate = LocalDate.parse(request.getDate(), formatter);
+        if(now.isAfter(reservationDate)) {
+            return false;
+        }
+
+        String[] timeArray = request.getTime().split(":");
+        int hour = Integer.parseInt(timeArray[0]);
+        int minute = Integer.parseInt(timeArray[1]);
+        int openingHour = Integer.parseInt(restaurant.getOpeningTime().split(":")[0]);
+        int openingMinute = Integer.parseInt(restaurant.getOpeningTime().split(":")[1]);
+        int closingHour = Integer.parseInt(restaurant.getClosingTime().split(":")[0]);
+        int closingMinute = Integer.parseInt(restaurant.getClosingTime().split(":")[1]);
+
+        if (hour >= openingHour && hour <= closingHour) {
+            return true;
+        } else return minute >= openingMinute && minute <= closingMinute;
+    }
+    @Transactional
+    public String makeReservation(MakeReservationRequest request, HttpServletRequest httpServletRequest) {
+        Restaurant restaurant = restaurantRepo.findByName(request.getRestaurantName())
+                .orElseThrow(() -> new IllegalStateException("Restaurant not found"));
+
+
+        if(!checkWithinRange(request)) {
+           throw new IllegalStateException("Reservation time is out of range");
         }
         if (isTableReserved(request.getRestaurantName(), request.getDate(), request.getTableID())) {
-            return "Table is already reserved for the given date";
+            throw new IllegalStateException("Table is already reserved");
         }
+
         // Fetch the specific table for the given restaurant name and table ID
         TableStatus tableStatus = tableStatusRepo.findAllByRestaurantNameAndID(request.getRestaurantName(), request.getTableID())
                 .orElseThrow(() -> new IllegalStateException("Table not found"));
@@ -75,7 +108,7 @@ public class ReservationService {
 
     }
     @Transactional
-    public String makeReservationByManager(CreateReservationRequest request, HttpServletRequest httpServletRequest) {
+    public String makeReservationByManager(MakeReservationRequest request, HttpServletRequest httpServletRequest) {
         String token = httpServletRequest.getHeader("Authorization").substring(7);
         String username = jwtService.extractUsername(token);
         User_ user = userRepo.findByUsername(username)
@@ -85,15 +118,17 @@ public class ReservationService {
         Restaurant restaurant = restaurantRepo.findByName(request.getRestaurantName())
                 .orElseThrow(() -> new IllegalStateException("Restaurant not found"));
 
+        if (isTableReserved(request.getRestaurantName(), request.getDate(), request.getTableID())) {
+            throw new IllegalStateException("Table is already reserved");
+        }
+
         // Check if the manager is the owner of the restaurant
         if (user.getID() == restaurant.getUser().getID()) {
+            // Check if the table is already reserved
 
-            if (request.getTableID() == 0) {
-                return "Table ID cannot be 0";
-            }
 
             if (isTableReserved(request.getRestaurantName(), request.getDate(), request.getTableID())) {
-                return "Table is already reserved for the given date";
+                throw new IllegalStateException("Table is already reserved");
             }
 
             // Fetch the specific table for the given restaurant name and table ID
@@ -102,7 +137,7 @@ public class ReservationService {
 
             // Check if the guest count exceeds the table's capacity
             if (request.getGuestCount() > tableStatus.getCapacity()) {
-                return "Guest count exceeds table capacity";
+                throw new IllegalStateException("Guest count exceeds table capacity");
             }
 
             // Build and save the reservation
@@ -150,7 +185,6 @@ public class ReservationService {
                 .map(tableStatus -> TableStatusDto.builder()
                         .ID(tableStatus.getID())
                         .capacity(tableStatus.getCapacity())
-                        .isReserved(tableStatus.isReserved())
                         .build())
                 .toList();
     }
@@ -182,9 +216,7 @@ public class ReservationService {
         User_ user = userRepo.findByUsername(username)
                 .orElseThrow(() -> new IllegalStateException("User not found"));
 
-        List<Reservation> reservations = reservationRepo.findAllByUser_ID(user.getID());
-
-
+        List<Reservation> reservations = reservationRepo.findAllByUser_IDAndStatusNot(user.getID(), ReservationStatus.CANCELED);
         return reservations.stream().map(
                 reservation -> ReservationDto.builder()
                         .ReservationID(reservation.getID())

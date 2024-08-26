@@ -1,4 +1,4 @@
-package com.example.akloona.Profile;
+package com.example.akloona.Service;
 
 import com.example.akloona.Token.TokenRepo;
 import jakarta.servlet.http.HttpServletRequest;
@@ -31,7 +31,6 @@ public class LogoutService implements LogoutHandler {
         var storedToken = tokenRepo.findByToken(jwt)
                 .orElse(null);
         if (storedToken != null) {
-            storedToken.setExpired(true);
             storedToken.setRevoked(true);
             tokenRepo.save(storedToken);
             SecurityContextHolder.clearContext();

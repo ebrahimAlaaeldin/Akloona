@@ -11,13 +11,11 @@ import java.util.List;
 @AllArgsConstructor
 @Data
 @Entity(name = "TableStatus")
+@NoArgsConstructor
 public class TableStatus {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int ID;
-
-    @Column(name = "isReserved", nullable = false)
-    private boolean isReserved;
 
     @Column(name = "capacity", nullable = false)
     private int capacity;
@@ -29,16 +27,4 @@ public class TableStatus {
     @JoinColumn(name = "restaurantID")
     private Restaurant restaurant;
 
-    public TableStatus() {
-        this(false, 2);
-    }
-
-    public TableStatus(boolean isOccupied, int capacity) {
-        this.isReserved = isOccupied;
-        this.capacity = capacity;
-    }
-
-    public void setCapacity(Integer capacity) {
-        this.capacity = capacity;
-    }
 }

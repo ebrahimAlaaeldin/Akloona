@@ -1,9 +1,12 @@
-package com.example.akloona.Reservation_;
+package com.example.akloona.Controllers;
 
+import com.example.akloona.Reservation_.AvailableTablesRequest;
+import com.example.akloona.Reservation_.CancelReservationRequest;
+import com.example.akloona.Reservation_.MakeReservationRequest;
+import com.example.akloona.Reservation_.UserReservationsRequest;
+import com.example.akloona.Service.ReservationService;
 import jakarta.servlet.http.HttpServletRequest;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -22,8 +25,8 @@ public class ReservationController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<String> makeReservation(@RequestBody CreateReservationRequest request, HttpServletRequest httpServletRequest) {
-
+    @PreAuthorize("hasAnyRole('CUSTOMER')")
+    public ResponseEntity<String> makeReservation(@RequestBody MakeReservationRequest request, HttpServletRequest httpServletRequest) {
         return ResponseEntity.ok(reservationService.makeReservation(request, httpServletRequest));
 
     }
@@ -42,14 +45,16 @@ public class ReservationController {
 
     @PostMapping("/make-reservation-by-manager")
     @PreAuthorize("hasAnyRole('MANAGER','STAFF')")
-    public ResponseEntity<String> makeReservationByManager(@RequestBody CreateReservationRequest request,HttpServletRequest httpServletRequest) {
+    public ResponseEntity<String> makeReservationByManager(@RequestBody MakeReservationRequest request,HttpServletRequest httpServletRequest) {
         return ResponseEntity.ok(reservationService.makeReservationByManager(request,httpServletRequest));
     }
 
     @PostMapping("/cancel-reservation")
     @PreAuthorize("hasAnyRole('CUSTOMER')")
-    public ResponseEntity<String> cancelReservation(@RequestBody CancelReservationRequest request,HttpServletRequest httpServletRequest) {
+    public ResponseEntity<String> cancelReservation(@RequestBody CancelReservationRequest request, HttpServletRequest httpServletRequest) {
         return ResponseEntity.ok(reservationService.cancelReservation(request,httpServletRequest).toString());
     }
+
+
 }
 

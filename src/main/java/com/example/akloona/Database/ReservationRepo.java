@@ -27,4 +27,6 @@ public interface ReservationRepo extends JpaRepository<Reservation, Integer> {
     List<Reservation> findAllByUser_ID(int userNotFound);
 
     List<Reservation> findByStatus(ReservationStatus status);
+
+    List<Reservation> findAllByUser_IDAndStatusNot(int id, ReservationStatus reservationStatus);
 }

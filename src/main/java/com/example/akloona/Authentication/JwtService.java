@@ -84,8 +84,7 @@ public class JwtService {
     //Check if the token is expired or not by comparing the expiration date with the current date
     private boolean isTokenExpired(String token) {
         var token2 = tokenRepo.findByToken(token);
-        boolean isExpired = token2.isPresent() && token2.get().isExpired();
-
+        boolean isExpired = token2.isPresent() && token2.get().isRevoked();
         return extractExpiration(token).before(new Date()) || isExpired;
     }
 

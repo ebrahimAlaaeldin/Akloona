@@ -1,4 +1,4 @@
-package com.example.akloona.Controller;
+package com.example.akloona.Restaurant_;
 
 
 import lombok.*;
@@ -14,5 +14,7 @@ public class CreateRestaurantRequest {
     private String address;
     private String phoneNumber;
     private int numberOfTables;
+    private String openingTime;
+    private String closingTime;
 
 }

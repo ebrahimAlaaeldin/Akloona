@@ -1,22 +1,17 @@
 package com.example.akloona.Database;
 
 
-import com.example.akloona.Authentication.Role;
+import com.example.akloona.Enums.Role;
+import com.example.akloona.Enums.UserStatus;
 import com.example.akloona.Token.Token;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDate;
 import java.util.Collection;
 import java.util.List;
-
-
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
 
 
 @Data
@@ -53,13 +48,17 @@ public class User_  implements UserDetails {
     @Column(name = "age", nullable = false)
     private int age;
 
+
+    @Enumerated(EnumType.STRING)
+    private UserStatus status;
+
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Token> tokens;
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Restaurant> restaurants;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
@@ -111,7 +110,4 @@ public class User_  implements UserDetails {
     }
 
 
-    public void addRestaurant(Restaurant restaurant) {
-        restaurants.add(restaurant);
-    }
 }
