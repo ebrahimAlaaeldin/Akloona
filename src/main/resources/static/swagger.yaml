@@ -1,0 +1,423 @@
+openapi: 3.0.0
+info:
+  title: Akloona API
+  description: API documentation for the Akloona's Restaurant Reservation System, Controllers In-use are AuthenticationController, RestaurantController, TableStatusController, ProfileController, ReservationController.
+  version: 1.0.0
+servers:
+  - url: /api
+paths:
+  /authenticate/register:
+    post:
+      summary: Register a new user
+      operationId: registerUser
+      requestBody:
+        description: User registration data
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterRequest'
+      responses:
+        '200':
+          description: User registered successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthenticationResponse'
+
+  /authenticate/login:
+    post:
+      summary: User login
+      operationId: authenticateUser
+      requestBody:
+        description: User login data
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuthenticationRequest'
+      responses:
+        '200':
+          description: User authenticated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthenticationResponse'
+
+  /authenticate/refresh-token:
+    post:
+      summary: Refresh authentication token
+      operationId: refreshToken
+      responses:
+        '200':
+          description: Token refreshed successfully
+
+  /restaurant/add:
+    post:
+      summary: Add a new restaurant
+      operationId: addRestaurant
+      requestBody:
+        description: Restaurant data
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateRestaurantRequest'
+      responses:
+        '200':
+          description: Restaurant added successfully
+
+  /restaurant/delete/{name}:
+    delete:
+      summary: Delete a restaurant by name
+      operationId: deleteRestaurant
+      parameters:
+        - name: name
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Restaurant deleted successfully
+
+  /restaurant/get-all:
+    get:
+      summary: Get all restaurants
+      operationId: getAllRestaurants
+      responses:
+        '200':
+          description: List of restaurants
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/RestaurantDTO'
+
+  /tables/create:
+    post:
+      summary: Create a new table status
+      operationId: createTableStatus
+      parameters:
+        - name: isReserved
+          in: query
+          required: true
+          schema:
+            type: boolean
+        - name: capacity
+          in: query
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Table created successfully
+
+  /tables/{id}:
+    get:
+      summary: Get table status by ID
+      operationId: getTableStatusById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Table found
+
+  /tables/all:
+    get:
+      summary: Get all table statuses
+      operationId: getAllTableStatuses
+      responses:
+        '200':
+          description: List of table statuses
+
+  /tables/update:
+    put:
+      summary: Update a table status
+      operationId: updateTableStatus
+      parameters:
+        - name: id
+          in: query
+          required: true
+          schema:
+            type: integer
+        - name: isReserved
+          in: query
+          schema:
+            type: boolean
+        - name: capacity
+          in: query
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Table updated successfully
+
+  /tables/delete:
+    delete:
+      summary: Delete a table status
+      operationId: deleteTableStatus
+      parameters:
+        - name: id
+          in: query
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Table deleted successfully
+
+  /profile/change-password:
+    put:
+      summary: Change user password
+      operationId: changePassword
+      requestBody:
+        description: Password change data
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChangePasswordRequest'
+      responses:
+        '200':
+          description: Password changed successfully
+
+  /profile/change-email:
+    put:
+      summary: Change user email
+      operationId: changeEmail
+      parameters:
+        - name: Email
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Email changed successfully
+
+  /profile/change-address:
+    put:
+      summary: Change user address
+      operationId: changeAddress
+      parameters:
+        - name: address
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Address changed successfully
+
+  /profile/change-phoneNumber:
+    put:
+      summary: Change user phone number
+      operationId: changePhoneNumber
+      parameters:
+        - name: phoneNumber
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Phone number changed successfully
+
+  /profile/delete-account:
+    delete:
+      summary: Delete user account
+      operationId: deleteAccount
+      responses:
+        '200':
+          description: Account deleted successfully
+
+  /reservation/get-available-tables:
+    get:
+      summary: Get available tables for reservation
+      operationId: getAvailableTables
+      requestBody:
+        description: Request data for available tables
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AvailableTablesRequest'
+      responses:
+        '200':
+          description: List of available tables
+
+  /reservation/create:
+    post:
+      summary: Create a reservation
+      operationId: makeReservation
+      requestBody:
+        description: Reservation data
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateReservationRequest'
+      responses:
+        '200':
+          description: Reservation created successfully
+
+  /reservation/get-User-Reservations:
+    get:
+      summary: Get reservations for a specific user
+      operationId: getReservationsForLoggedInUser
+      requestBody:
+        description: User name for reservation lookup
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserReservationsRequest'
+      responses:
+        '200':
+          description: List of reservations for the user
+
+  /reservation/get-My-Reservations:
+    get:
+      summary: Get reservations for the logged-in user
+      operationId: getReservationsForLoggedInUser
+      responses:
+        '200':
+          description: List of reservations for the logged-in user
+
+  /reservation/make-reservation-by-manager:
+    post:
+      summary: Create a reservation by manager or staff
+      operationId: makeReservationByManager
+      requestBody:
+        description: Reservation data
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateReservationRequest'
+      responses:
+        '200':
+          description: Reservation created successfully
+
+  /reservation/cancel-reservation:
+    post:
+      summary: Cancel a reservation
+      operationId: cancelReservation
+      requestBody:
+        description: Reservation cancellation data
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CancelReservationRequest'
+      responses:
+        '200':
+          description: Reservation cancelled successfully
+
+components:
+  schemas:
+    RegisterRequest:
+      type: object
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+        email:
+          type: string
+
+    AuthenticationResponse:
+      type: object
+      properties:
+        token:
+          type: string
+
+    AuthenticationRequest:
+      type: object
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+
+    CreateRestaurantRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        location:
+          type: string
+        cuisineType:
+          type: string
+
+    RestaurantDTO:
+      type: object
+      properties:
+        name:
+          type: string
+        location:
+          type: string
+        cuisineType:
+          type: string
+
+    TableStatus:
+      type: object
+      properties:
+        id:
+          type: integer
+        isReserved:
+          type: boolean
+        capacity:
+          type: integer
+
+    AvailableTablesRequest:
+      type: object
+      properties:
+        date:
+          type: string
+          format: date-time
+        time:
+          type: string
+        partySize:
+          type: integer
+
+    CreateReservationRequest:
+      type: object
+      properties:
+        restaurantName:
+          type: string
+        date:
+          type: string
+          format: date-time
+        time:
+          type: string
+        partySize:
+          type: integer
+        specialRequests:
+          type: string
+
+    UserReservationsRequest:
+      type: object
+      properties:
+        userName:
+          type: string
+
+    CancelReservationRequest:
+      type: object
+      properties:
+        reservationId:
+          type: integer
+
+    ChangePasswordRequest:
+      type: object
+      properties:
+        oldPassword:
+          type: string
+        newPassword:
+          type: string
