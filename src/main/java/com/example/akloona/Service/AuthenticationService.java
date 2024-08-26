@@ -2,9 +2,9 @@ package com.example.akloona.Service;
 
 import com.example.akloona.Authentication.JwtService;
 import com.example.akloona.Enums.Role;
-import com.example.akloona.AuthenticationController.AuthenticationRequest;
-import com.example.akloona.AuthenticationController.AuthenticationResponse;
-import com.example.akloona.AuthenticationController.RegisterRequest;
+import com.example.akloona.Authentication_.AuthenticationRequest;
+import com.example.akloona.Authentication_.AuthenticationResponse;
+import com.example.akloona.Authentication_.RegisterRequest;
 import com.example.akloona.Database.UserRepo;
 import com.example.akloona.Database.User_;
 import com.example.akloona.Enums.UserStatus;

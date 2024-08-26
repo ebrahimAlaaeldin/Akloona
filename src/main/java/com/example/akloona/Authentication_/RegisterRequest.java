@@ -1,4 +1,5 @@
-package com.example.akloona.AuthenticationController;
+package com.example.akloona.Authentication_;
+
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,8 +10,14 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class AuthenticationRequest {
+public class RegisterRequest {
+
     private String username;
     private String password;
+    private String accountType;
+    private String email;
+    private String phoneNumber;
+    private String address;
+    private int dob;
 
 }

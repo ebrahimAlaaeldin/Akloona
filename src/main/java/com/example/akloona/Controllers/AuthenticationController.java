@@ -1,9 +1,9 @@
 package com.example.akloona.Controllers;
 
 
-import com.example.akloona.AuthenticationController.AuthenticationRequest;
-import com.example.akloona.AuthenticationController.AuthenticationResponse;
-import com.example.akloona.AuthenticationController.RegisterRequest;
+import com.example.akloona.Authentication_.AuthenticationRequest;
+import com.example.akloona.Authentication_.AuthenticationResponse;
+import com.example.akloona.Authentication_.RegisterRequest;
 import com.example.akloona.Service.AuthenticationService;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -12,7 +12,6 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
