@@ -85,11 +85,15 @@ public class AuthenticationService {
         }
     }
 
-    public AuthenticationResponse authenticate(AuthenticationRequest request) {
-        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
+    public Object authenticate(AuthenticationRequest request) {
+        try {
+            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
                 request.getUsername(),
                 request.getPassword()
-        ));
+            ));
+        } catch (Exception e) {
+            return "Authentication failed: " + e.getMessage();
+        }
 
         var user = userRepo.findByUsername(request.getUsername())
                 .orElseThrow(() -> new RuntimeException("User not found"));
@@ -104,7 +108,7 @@ public class AuthenticationService {
                 .user(user)
                 .build();
         tokenRepository.save(token);
-
+        
         return AuthenticationResponse.builder().token(jwtToken).build();
     }
 

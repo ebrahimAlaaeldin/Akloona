@@ -35,18 +35,13 @@ public class RestaurantController {
     @DeleteMapping("/delete")
     @PreAuthorize("hasRole('MANAGER')")
     public ResponseEntity<String> deleteRestaurant(@RequestBody DeleteRestaurantRequest request) {
-        try {
-            restaurantService.deleteRestaurant(request);
-            return ResponseEntity.ok("Restaurant Deleted Successfully");
-        } catch (Exception e) {
-           return ResponseEntity.ok("Restaurant not found");
-        }
+            return ResponseEntity.ok(restaurantService.deleteRestaurant(request));
     }
 
     @GetMapping("/get-all")
     @PreAuthorize("hasRole('MANAGER')")
-    public ResponseEntity<List<RestaurantDTO>> getAllRestaurants(HttpServletRequest httpServletRequest) {
-        List<RestaurantDTO> restaurants = restaurantService.getAllRestaurants(httpServletRequest);
+    public ResponseEntity<Object> getAllRestaurants(HttpServletRequest httpServletRequest) {
+        Object restaurants = restaurantService.getAllRestaurants(httpServletRequest);
         return ResponseEntity.ok(restaurants);
     }
 }

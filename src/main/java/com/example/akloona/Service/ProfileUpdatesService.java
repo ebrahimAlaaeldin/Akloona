@@ -14,6 +14,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import java.util.regex.Pattern;
 
 @Service
 @RequiredArgsConstructor
@@ -26,6 +27,13 @@ public class ProfileUpdatesService {
     private final JwtService jwtService;
     private final TokenRepo tokenRepo;
 
+    private void validatePassword(String password) {
+        String passwordPattern = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=]).{8,}$";
+        if (!Pattern.matches(passwordPattern, password)) {
+            throw new IllegalArgumentException("Password must be at least 8 characters long, contain at least one digit, one lowercase letter, one uppercase letter, and one special character.");
+        }
+    }
+
     public String changePassword(ChangePasswordRequest request) {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
                 request.getUsername(),
@@ -34,6 +42,7 @@ public class ProfileUpdatesService {
 
 
         var user = userRepo.findByUsername(request.getUsername()).orElseThrow(() -> new RuntimeException("User not found"));
+        validatePassword(request.getNewPassword());
         user.setPassword(passwordEncoder.encode(request.getNewPassword()));
         userRepo.save(user);
         return "Password changed successfully";
@@ -43,12 +52,12 @@ public class ProfileUpdatesService {
         String token = httpServletRequest.getHeader("Authorization").substring(7);
         String username = jwtService.extractUsername(token);
 
-        var user = userRepo.findByUsername(username).orElseThrow(
-                () -> new RuntimeException("User not found")
-        );
-        user.setEmail(request.getNewEmail());
-        userRepo.save(user);
-        return "Email changed successfully";
+            var user = userRepo.findByUsername(username).orElseThrow(
+                    () -> new RuntimeException("User not found")
+            );
+            user.setEmail(request.getNewEmail());
+            userRepo.save(user);
+            return "Email changed successfully";
     }
 
     public String changeAddress(ChangeAddressRequest request, HttpServletRequest httpServletRequest) {

@@ -27,57 +27,74 @@ public class RestaurantService {
 
     @Transactional
     public String addRestaurant(CreateRestaurantRequest createRestaurantRequest, HttpServletRequest httpServletRequest) {
-        String token = httpServletRequest.getHeader("Authorization").substring(7);
-        String username = jwtService.extractUsername(token);
-        User_ user = userRepo.findByUsername(username).orElseThrow(() -> new RuntimeException("User not found"));
+        try {
+            String token = httpServletRequest.getHeader("Authorization").substring(7);
+            String username = jwtService.extractUsername(token);
+            User_ user = userRepo.findByUsername(username).orElseThrow(() -> new RuntimeException("User not found"));
 
 
-        Restaurant restaurant = Restaurant.builder()
-                .name(createRestaurantRequest.getName())
-                .address(createRestaurantRequest.getAddress())
-                .phoneNumber(createRestaurantRequest.getPhoneNumber())
-                .numberOfTables(createRestaurantRequest.getNumberOfTables())
-                .user(user)
-                .openingTime(createRestaurantRequest.getOpeningTime())
-                .closingTime(createRestaurantRequest.getClosingTime())
-                .build();
+            Restaurant restaurant = Restaurant.builder()
+                    .name(createRestaurantRequest.getName())
+                    .address(createRestaurantRequest.getAddress())
+                    .phoneNumber(createRestaurantRequest.getPhoneNumber())
+                    .numberOfTables(createRestaurantRequest.getNumberOfTables())
+                    .user(user)
+                    .openingTime(createRestaurantRequest.getOpeningTime())
+                    .closingTime(createRestaurantRequest.getClosingTime())
+                    .build();
 
-        restaurant.addTable(createRestaurantRequest.getNumberOfTables());
+            restaurant.addTable(createRestaurantRequest.getNumberOfTables());
 
-        restaurantRepo.save(restaurant);
-        user.getRestaurants().add(restaurant);
+            restaurantRepo.save(restaurant);
+            user.getRestaurants().add(restaurant);
 
-        userRepo.save(user);
+            userRepo.save(user);
 
-        return "Restaurant added successfully";
+            return "Restaurant added successfully";
+        }catch (RuntimeException e) {
+            return "Error: " + e.getMessage();}
+        catch(Exception e){
+                return "Error: An unexpected error occurred - " +e.getMessage();
+        }
     }
 
     @Transactional
-    public List<RestaurantDTO> getAllRestaurants(HttpServletRequest httpServletRequest) {
-        String token = httpServletRequest.getHeader("Authorization").substring(7);
-        String username = jwtService.extractUsername(token);
-        User_ user = userRepo.findByUsername(username).orElseThrow(() -> new RuntimeException("User not found"));
+    public Object getAllRestaurants(HttpServletRequest httpServletRequest) {
+        try{
+            String token = httpServletRequest.getHeader("Authorization").substring(7);
+            String username = jwtService.extractUsername(token);
+            User_ user = userRepo.findByUsername(username).orElseThrow(() -> new RuntimeException("User not found"));
 
 
-        // Map the Restaurant entities to RestaurantDTOs to avoid circular references
-        List<RestaurantDTO> restaurantDTOs = user.getRestaurants().stream()
-                .map(restaurant -> RestaurantDTO.builder()
-                        .address(restaurant.getAddress())
-                        .numberOfTables(restaurant.getNumberOfTables())
-                        .name(restaurant.getName())
-                        .phoneNumber(restaurant.getPhoneNumber())
-                        .build())
-                .collect(Collectors.toList());
+            // Map the Restaurant entities to RestaurantDTOs to avoid circular references
+            List<RestaurantDTO> restaurantDTOs = user.getRestaurants().stream()
+                    .map(restaurant -> RestaurantDTO.builder()
+                            .address(restaurant.getAddress())
+                            .numberOfTables(restaurant.getNumberOfTables())
+                            .name(restaurant.getName())
+                            .phoneNumber(restaurant.getPhoneNumber())
+                            .build())
+                    .collect(Collectors.toList());
 
-        return restaurantDTOs;
+            return restaurantDTOs;
+        }catch (RuntimeException e) {
+            return "Error: " + e.getMessage();}
+        catch(Exception e){
+                return "Error: An unexpected error occurred - " +e.getMessage();
+        }    
     }
 
 
     @Transactional
-    public void deleteRestaurant(DeleteRestaurantRequest request) {
-        log.info("Deleting restaurant with ID " + request.getRestaurantName());
+    public String deleteRestaurant(DeleteRestaurantRequest request) {
+        try{
+            log.info("Deleting restaurant with ID " + request.getRestaurantName());
 
-        restaurantRepo.deleteByName(request.getRestaurantName());
-
+            restaurantRepo.deleteByName(request.getRestaurantName());
+            return "Restaurant Deleted Successfully";
+        }catch(Exception e)
+        {
+            return "Error: An unexpected error occurred - " + e.getMessage();
+        }    
     }
 }

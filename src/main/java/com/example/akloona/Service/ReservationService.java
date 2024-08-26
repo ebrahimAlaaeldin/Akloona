@@ -68,95 +68,107 @@ public class ReservationService {
     }
     @Transactional
     public String makeReservation(MakeReservationRequest request, HttpServletRequest httpServletRequest) {
-        Restaurant restaurant = restaurantRepo.findByName(request.getRestaurantName())
-                .orElseThrow(() -> new IllegalStateException("Restaurant not found"));
+        try{
+                Restaurant restaurant = restaurantRepo.findByName(request.getRestaurantName())
+                        .orElseThrow(() -> new IllegalStateException("Restaurant not found"));
 
 
-        if(!checkWithinRange(request)) {
-           throw new IllegalStateException("Reservation time is out of range");
+                if(!checkWithinRange(request)) {
+                throw new IllegalStateException("Reservation time is out of range");
+                }
+                if (isTableReserved(request.getRestaurantName(), request.getDate(), request.getTableID())) {
+                throw new IllegalStateException("Table is already reserved");
+                }
+
+                // Fetch the specific table for the given restaurant name and table ID
+                TableStatus tableStatus = tableStatusRepo.findAllByRestaurantNameAndID(request.getRestaurantName(), request.getTableID())
+                        .orElseThrow(() -> new IllegalStateException("Table not found"));
+
+                // Check if the guest count exceeds the table's capacity
+                if (request.getGuestCount() > tableStatus.getCapacity()) {
+                return "Guest count exceeds table capacity";
+                }
+
+
+                Reservation reservation = Reservation.builder()
+                        .date(request.getDate())
+                        .time(request.getTime())
+                        .tableStatus(tableStatusRepo.findById(request.getTableID())
+                                .orElseThrow(() -> new IllegalStateException("Table not found")))
+                        .guestCount(request.getGuestCount())
+                        .restaurant(restaurant)
+                        .guestCount(request.getGuestCount())
+                        .user(userRepo.findByUsername(jwtService.extractUsername(httpServletRequest.getHeader("Authorization").substring(7)))
+                                .orElseThrow(() -> new IllegalStateException("User not found"))
+                        ).status(ReservationStatus.BOOKED)
+                        .build();
+
+                reservationRepo.save(reservation);
+
+                return "Reservation created successfully\n your Reservation ID is " + reservation.getID();
+
+        }catch (IllegalStateException e) {
+                return "Error: " + e.getMessage();}
+        catch(Exception e){
+                return "Error: An unexpected error occurred - " +e.getMessage();
         }
-        if (isTableReserved(request.getRestaurantName(), request.getDate(), request.getTableID())) {
-            throw new IllegalStateException("Table is already reserved");
-        }
-
-        // Fetch the specific table for the given restaurant name and table ID
-        TableStatus tableStatus = tableStatusRepo.findAllByRestaurantNameAndID(request.getRestaurantName(), request.getTableID())
-                .orElseThrow(() -> new IllegalStateException("Table not found"));
-
-        // Check if the guest count exceeds the table's capacity
-        if (request.getGuestCount() > tableStatus.getCapacity()) {
-            return "Guest count exceeds table capacity";
-        }
-
-
-        Reservation reservation = Reservation.builder()
-                .date(request.getDate())
-                .time(request.getTime())
-                .tableStatus(tableStatusRepo.findById(request.getTableID())
-                        .orElseThrow(() -> new IllegalStateException("Table not found")))
-                .guestCount(request.getGuestCount())
-                .restaurant(restaurant)
-                .guestCount(request.getGuestCount())
-                .user(userRepo.findByUsername(jwtService.extractUsername(httpServletRequest.getHeader("Authorization").substring(7)))
-                        .orElseThrow(() -> new IllegalStateException("User not found"))
-                ).status(ReservationStatus.BOOKED)
-                .build();
-
-        reservationRepo.save(reservation);
-
-        return "Reservation created successfully\n your Reservation ID is " + reservation.getID();
-
     }
     @Transactional
     public String makeReservationByManager(MakeReservationRequest request, HttpServletRequest httpServletRequest) {
-        String token = httpServletRequest.getHeader("Authorization").substring(7);
-        String username = jwtService.extractUsername(token);
-        User_ user = userRepo.findByUsername(username)
-                .orElseThrow(() -> new IllegalStateException("User not found"));
+        try {
+                String token = httpServletRequest.getHeader("Authorization").substring(7);
+                String username = jwtService.extractUsername(token);
+                User_ user = userRepo.findByUsername(username)
+                        .orElseThrow(() -> new IllegalStateException("User not found"));
 
-        // Fetch the restaurant once and reuse it
-        Restaurant restaurant = restaurantRepo.findByName(request.getRestaurantName())
-                .orElseThrow(() -> new IllegalStateException("Restaurant not found"));
+                // Fetch the restaurant once and reuse it
+                Restaurant restaurant = restaurantRepo.findByName(request.getRestaurantName())
+                        .orElseThrow(() -> new IllegalStateException("Restaurant not found"));
 
-        if (isTableReserved(request.getRestaurantName(), request.getDate(), request.getTableID())) {
-            throw new IllegalStateException("Table is already reserved");
-        }
-
-        // Check if the manager is the owner of the restaurant
-        if (user.getID() == restaurant.getUser().getID()) {
-            // Check if the table is already reserved
-
-
-            if (isTableReserved(request.getRestaurantName(), request.getDate(), request.getTableID())) {
+                if (isTableReserved(request.getRestaurantName(), request.getDate(), request.getTableID())) {
                 throw new IllegalStateException("Table is already reserved");
-            }
+                }
 
-            // Fetch the specific table for the given restaurant name and table ID
-            TableStatus tableStatus = tableStatusRepo.findAllByRestaurantNameAndID(request.getRestaurantName(), request.getTableID())
-                    .orElseThrow(() -> new IllegalStateException("Table not found"));
+                // Check if the manager is the owner of the restaurant
+                if (user.getID() == restaurant.getUser().getID()) {
+                // Check if the table is already reserved
 
-            // Check if the guest count exceeds the table's capacity
-            if (request.getGuestCount() > tableStatus.getCapacity()) {
-                throw new IllegalStateException("Guest count exceeds table capacity");
-            }
 
-            // Build and save the reservation
-            Reservation reservation = Reservation.builder()
-                    .date(request.getDate())
-                    .time(request.getTime())
-                    .tableStatus(tableStatus)
-                    .guestCount(request.getGuestCount())
-                    .restaurant(restaurant)
-                    .user(userRepo.findByUsername(request.getUsername())
-                            .orElseThrow(() -> new IllegalStateException("User not found"))
-                    )
-                    .build();
+                if (isTableReserved(request.getRestaurantName(), request.getDate(), request.getTableID())) {
+                        throw new IllegalStateException("Table is already reserved");
+                }
 
-            reservationRepo.save(reservation);
+                // Fetch the specific table for the given restaurant name and table ID
+                TableStatus tableStatus = tableStatusRepo.findAllByRestaurantNameAndID(request.getRestaurantName(), request.getTableID())
+                        .orElseThrow(() -> new IllegalStateException("Table not found"));
 
-            return "Reservation created successfully\n your Reservation ID is " + reservation.getID();
-        } else {
-            return "You are not the owner of the restaurant";
+                // Check if the guest count exceeds the table's capacity
+                if (request.getGuestCount() > tableStatus.getCapacity()) {
+                        throw new IllegalStateException("Guest count exceeds table capacity");
+                }
+
+                // Build and save the reservation
+                Reservation reservation = Reservation.builder()
+                        .date(request.getDate())
+                        .time(request.getTime())
+                        .tableStatus(tableStatus)
+                        .guestCount(request.getGuestCount())
+                        .restaurant(restaurant)
+                        .user(userRepo.findByUsername(request.getUsername())
+                                .orElseThrow(() -> new IllegalStateException("User not found"))
+                        )
+                        .build();
+
+                reservationRepo.save(reservation);
+
+                return "Reservation created successfully\n your Reservation ID is " + reservation.getID();
+                } else {
+                return "You are not the owner of the restaurant";
+                }
+        }catch (IllegalStateException e) {
+                return "Error: " + e.getMessage();}
+        catch(Exception e){
+                return "Error: An unexpected error occurred - " +e.getMessage();
         }
     }
 
@@ -177,8 +189,8 @@ public class ReservationService {
     @Transactional
     public Object getAvailableTables(AvailableTablesRequest request) {
 
-
-        return tableStatusRepo.findAllByRestaurantName(request.getRestaurantName())
+        try {
+                return tableStatusRepo.findAllByRestaurantName(request.getRestaurantName())
                 .orElseThrow(() -> new IllegalStateException("Restaurant not found"))
                 .stream()
                 .filter(tableStatus -> tableStatus.getReservations().stream().noneMatch(reservation1 -> reservation1.getDate().equals(request.getDate())))
@@ -187,71 +199,94 @@ public class ReservationService {
                         .capacity(tableStatus.getCapacity())
                         .build())
                 .toList();
+        }catch (IllegalStateException e) {
+                return "Error: " + e.getMessage();}
+        catch(Exception e){
+                return "Error: An unexpected error occurred - " +e.getMessage();
+        }
     }
 
     @Transactional
     public Object getUserReservationsByManager(UserReservationsRequest request) {
+        try{
+                User_ user = userRepo.findByUsername(request.getUsername())
+                        .orElseThrow(() -> new IllegalStateException("User not found"));
 
-        User_ user = userRepo.findByUsername(request.getUsername())
-                .orElseThrow(() -> new IllegalStateException("User not found"));
+                List<Reservation> reservations = reservationRepo.findAllByUser_ID(user.getID());
 
-        List<Reservation> reservations = reservationRepo.findAllByUser_ID(user.getID());
+                return reservations.stream().map(
+                        reservation -> ReservationDto.builder()
+                                .ReservationID(reservation.getID())
+                                .userName(reservation.getUser().getUsername())
+                                .date(reservation.getDate())
+                                .time(reservation.getTime())
+                                .guestCount(reservation.getGuestCount())
+                                .restaurantName(reservation.getRestaurant().getName())
+                                .tableID(reservation.getTableStatus().getID())
+                                .build()
+                ).toList();
 
-        return reservations.stream().map(
-                reservation -> ReservationDto.builder()
-                        .ReservationID(reservation.getID())
-                        .userName(reservation.getUser().getUsername())
-                        .date(reservation.getDate())
-                        .time(reservation.getTime())
-                        .guestCount(reservation.getGuestCount())
-                        .restaurantName(reservation.getRestaurant().getName())
-                        .tableID(reservation.getTableStatus().getID())
-                        .build()
-        ).toList();
+        }catch (IllegalStateException e) {
+                return "Error: " + e.getMessage();}
+        catch(Exception e){
+                return "Error: An unexpected error occurred - " +e.getMessage();
+        }
     }
     @Transactional
     public Object getMyReservations(HttpServletRequest httpServletRequest) {
-        String token = httpServletRequest.getHeader("Authorization").substring(7);
-        String username = jwtService.extractUsername(token);
-        User_ user = userRepo.findByUsername(username)
-                .orElseThrow(() -> new IllegalStateException("User not found"));
+        try{
+                String token = httpServletRequest.getHeader("Authorization").substring(7);
+                String username = jwtService.extractUsername(token);
+                User_ user = userRepo.findByUsername(username)
+                        .orElseThrow(() -> new IllegalStateException("User not found"));
 
-        List<Reservation> reservations = reservationRepo.findAllByUser_IDAndStatusNot(user.getID(), ReservationStatus.CANCELED);
-        return reservations.stream().map(
-                reservation -> ReservationDto.builder()
-                        .ReservationID(reservation.getID())
-                        .userName(reservation.getUser().getUsername())
-                        .date(reservation.getDate())
-                        .time(reservation.getTime())
-                        .guestCount(reservation.getGuestCount())
-                        .restaurantName(reservation.getRestaurant().getName())
-                        .tableID(reservation.getTableStatus().getID())
-                        .build()
-        ).toList();
+                List<Reservation> reservations = reservationRepo.findAllByUser_IDAndStatusNot(user.getID(), ReservationStatus.CANCELED);
+                return reservations.stream().map(
+                        reservation -> ReservationDto.builder()
+                                .ReservationID(reservation.getID())
+                                .userName(reservation.getUser().getUsername())
+                                .date(reservation.getDate())
+                                .time(reservation.getTime())
+                                .guestCount(reservation.getGuestCount())
+                                .restaurantName(reservation.getRestaurant().getName())
+                                .tableID(reservation.getTableStatus().getID())
+                                .build()
+                ).toList();
+        }catch (IllegalStateException e) {
+                return "Error: " + e.getMessage();}
+        catch(Exception e){
+                return "Error: An unexpected error occurred - " +e.getMessage();
+        }
     }
 
     public Object cancelReservation(CancelReservationRequest request, HttpServletRequest httpServletRequest) {
-        String token = httpServletRequest.getHeader("Authorization").substring(7);
-        String username = jwtService.extractUsername(token);
-        User_ user = userRepo.findByUsername(username)
-                .orElseThrow(() -> new IllegalStateException("User not found"));
-        Reservation reservation = reservationRepo.findById(request.getReservationID())
-                .orElseThrow(() -> new IllegalStateException("Reservation not found"));
+        try{
+                String token = httpServletRequest.getHeader("Authorization").substring(7);
+                String username = jwtService.extractUsername(token);
+                User_ user = userRepo.findByUsername(username)
+                        .orElseThrow(() -> new IllegalStateException("User not found"));
+                Reservation reservation = reservationRepo.findById(request.getReservationID())
+                        .orElseThrow(() -> new IllegalStateException("Reservation not found"));
 
-        // Define the date format that matches your string (e.g., "2021-8-24")
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-M-d");
-        // Parse the string date into a LocalDate object
-        LocalDate reservationDate = LocalDate.parse(reservation.getDate(), formatter);
-        // Get the current date
-        LocalDate now = LocalDate.now();
-        // Compare the dates
-        if (now.isBefore(reservationDate.minusDays(1))) {
-            reservation.setStatus(ReservationStatus.CANCELED);
-            reservationRepo.save(reservation); // Save the updated reservation
-            return "Reservation cancelled successfully";
-        } else {
-            return "Reservation cannot be cancelled";
-        }
+                // Define the date format that matches your string (e.g., "2021-8-24")
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-M-d");
+                // Parse the string date into a LocalDate object
+                LocalDate reservationDate = LocalDate.parse(reservation.getDate(), formatter);
+                // Get the current date
+                LocalDate now = LocalDate.now();
+                // Compare the dates
+                if (now.isBefore(reservationDate.minusDays(1))) {
+                reservation.setStatus(ReservationStatus.CANCELED);
+                reservationRepo.save(reservation); // Save the updated reservation
+                return "Reservation cancelled successfully";
+                } else {
+                return "Reservation cannot be cancelled";
+                }
+        }catch (IllegalStateException e) {
+                return "Error: " + e.getMessage();}
+        catch(Exception e){
+                return "Error: An unexpected error occurred - " +e.getMessage();
+        }        
     }
 }
 
